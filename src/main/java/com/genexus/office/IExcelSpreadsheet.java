@@ -39,5 +39,7 @@ public interface IExcelSpreadsheet
 
 	public void setColumnWidth(IExcelWorksheet worksheet, int colIdx, int width);
 	public void setRowHeight(IExcelWorksheet worksheet, int rowIdx, int height);
+
+	boolean setActiveWorkSheet(String name);
 	
 }

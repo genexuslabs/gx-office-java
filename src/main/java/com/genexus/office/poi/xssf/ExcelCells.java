@@ -132,7 +132,7 @@ public class ExcelCells implements IExcelCellRange {
 
 		try {
 			for (int i = 1; i <= cellCount; i++) {
-				pCells[i].setCellValue(value);
+				pCells[i].setCellValue(value);				
 			}
 			return true;
 

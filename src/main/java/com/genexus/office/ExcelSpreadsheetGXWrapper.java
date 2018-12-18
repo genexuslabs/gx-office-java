@@ -168,6 +168,9 @@ public class ExcelSpreadsheetGXWrapper implements IGxError
 		if (isOK() && _document.getWorksheets().size() >= sheetIdx)
 		{
 			_currentWorksheet = _document.getWorksheets().get(sheetIdx);
+			if (_currentWorksheet != null) {
+				_document.setActiveWorkSheet(_currentWorksheet.getName());
+			}
 			return true;
 		}
 		return false;
@@ -180,6 +183,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError
 			ExcelWorksheet ws = _document.getWorkSheet(sheetName);
 			if (ws != null) {
 				_currentWorksheet = ws;
+				_document.setActiveWorkSheet(sheetName);
 				return true;
 			}
 		}

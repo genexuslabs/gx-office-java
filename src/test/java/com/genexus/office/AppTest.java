@@ -31,6 +31,60 @@ public class AppTest
 	 */
 	
 	@Test
+	public void testjapan1()
+	{
+		String excel1 = basePath + "test_japan1";
+		deletefile(excel1 + ".xlsx");
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel1);
+		excel.setColumnWidth(1,  100);
+		excel.getCells(2, 1, 1, 5).setNumericValue(new java.math.BigDecimal(123.456));
+		ExcelStyle newCellStyle = new ExcelStyle();
+		newCellStyle.getCellFont().setBold(true);
+		excel.getCells(2, 1, 1, 5).setCellStyle(newCellStyle);
+	
+		excel.save();
+
+	}
+	
+	@Test
+	public void testjapan2()
+	{
+		String excel1 = basePath + "test_japan2";
+		deletefile(excel1 + ".xlsx");
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel1);
+		excel.setColumnWidth(1,  100);
+		excel.getCells(2, 1, 5, 5).setNumericValue(new java.math.BigDecimal(123.456));
+		ExcelStyle newCellStyle = new ExcelStyle();
+		newCellStyle.getCellFont().setBold(true);
+		excel.getCells(2, 1, 3, 3).setCellStyle(newCellStyle);
+	
+		excel.save();
+
+	}
+	
+	@Test
+	public void testActiveWorksheet()
+	{
+		String excel1 = basePath + "ActiveWorksheet";
+		deletefile(excel1 + ".xlsx");
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel1);
+		
+		excel.getCells(2, 1, 5, 5).setNumericValue(new java.math.BigDecimal(123.456));
+		excel.insertSheet("test1");
+	
+		excel.insertSheet("test2");
+		excel.insertSheet("test3");
+		excel.setCurrentWorksheetByName("test2");
+		excel.getCells(2, 1, 5, 5).setNumericValue(new java.math.BigDecimal(3));
+		excel.save();
+
+	}
+	
+	
+	@Test
 	public void testWithoutExtensions()
 	{
 		String excel1 = basePath + "test_withoutextension";

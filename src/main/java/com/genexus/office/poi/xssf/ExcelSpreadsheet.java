@@ -258,6 +258,19 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 		}
 	}
 
+	
+	@Override
+	public boolean setActiveWorkSheet(String name) {
+		int idx = _workbook.getSheetIndex(name);
+		if (idx >= 0)
+		{
+			_workbook.getSheetAt(idx).setSelected(true);
+			_workbook.setActiveSheet(idx);
+			_workbook.setSelectedTab(idx);
+		}
+		return idx >= 0;
+	}
+	
 	@Override
 	public ExcelWorksheet getWorkSheet(String name) {
 		XSSFSheet sheet = _workbook.getSheet(name);
@@ -276,8 +289,7 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 		XSSFSheet sheet = _workbook.getSheet(worksheet.getName());
 		if (colIdx >= 1 && sheet != null && width <= 255) {
 			sheet.setColumnWidth(colIdx - 1, 256 * width);
-		}
-		
+		}		
 	}
 
 	@Override
@@ -292,4 +304,12 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 			sheet.getRow(rowIdx).setHeightInPoints((short) height);
 		}
 	}
+	
+	/*@Override	
+	public Boolean setCurrentWorksheetByName(String sheetName)
+	{		
+		_workbook.setActiveSheet(_workbook.getSheetIndex(sheetName));
+		return true;
+	}*/
+	
 }
