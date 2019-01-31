@@ -1,7 +1,7 @@
 package com.genexus.office.style;
 
 public class ExcelColor extends ExcelStyleDimension
-{
+{	
 	private Integer _alpha = null;
 	public Integer getAlpha() {
 		return _alpha;
@@ -49,7 +49,7 @@ public class ExcelColor extends ExcelStyleDimension
 		this._blue = b;
 		setChanged();
 	}
-
+	
 	
 
 }

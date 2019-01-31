@@ -2,23 +2,27 @@ package com.genexus.office.style;
 
 public class ExcelBorder extends ExcelStyleDimension {
 	private ExcelColor borderColor;
-	private Boolean border;
-	
-	public ExcelColor getBorderColor() {
-		return borderColor;
+	private String borderStyle = "";
+		
+	public String getBorder() {
+		return borderStyle;
 	}
 
-	public Boolean getBorder() {
-		return border;
-	}
-
-	public void setBorder(Boolean border) {
-		this.border = border;
+	public void setBorder(String border) {
+		this.borderStyle = border;	
 		setChanged();
 	}
 
 	public ExcelBorder() {		
 		borderColor = new ExcelColor();
+	}
+
+	public ExcelColor getBorderColor() {
+		return borderColor;
+	}
+
+	public void setBorderColor(ExcelColor borderColor) {
+		this.borderColor = borderColor;
 	}
 	
 	

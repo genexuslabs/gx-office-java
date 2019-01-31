@@ -1,0 +1,49 @@
+package com.genexus.office.style;
+
+public class ExcelCellBorder {
+	private ExcelBorder borderTop = new ExcelBorder();
+	private ExcelBorder borderBottom  = new ExcelBorder();
+	private ExcelBorder borderLeft = new ExcelBorder();
+	private ExcelBorder borderRight = new ExcelBorder();
+	
+	
+	
+	public void setAll(ExcelBorder borderStyle) {
+		borderTop = borderStyle;
+		borderBottom = borderStyle;
+		borderLeft = borderStyle;
+		borderRight = borderStyle;
+	}
+	
+	public ExcelBorder getBorderBottom() {
+		return borderBottom;
+	}
+	
+	public void setBorderBottom(ExcelBorder borderBottom) {
+		this.borderBottom = borderBottom;
+	}
+	
+	public ExcelBorder getBorderTop() {
+		return borderTop;
+	}
+	
+	public void setBorderTop(ExcelBorder borderTop) {
+		this.borderTop = borderTop;
+	}
+	
+	public ExcelBorder getBorderLeft() {
+		return borderLeft;
+	}
+	
+	public void setBorderLeft(ExcelBorder borderLeft) {
+		this.borderLeft = borderLeft;
+	}
+	
+	public ExcelBorder getBorderRight() {
+		return borderRight;
+	}
+	public void setBorderRight(ExcelBorder borderRight) {
+		this.borderRight = borderRight;
+	}
+	
+}

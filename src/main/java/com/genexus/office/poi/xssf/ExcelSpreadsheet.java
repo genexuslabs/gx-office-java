@@ -6,6 +6,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -304,6 +309,191 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 			sheet.getRow(rowIdx).setHeightInPoints((short) height);
 		}
 	}
+
+	@Override
+	public Boolean deleteColumn(IExcelWorksheet worksheet, int colIdx) {
+		XSSFSheet sheet = _workbook.getSheet(worksheet.getName());
+		if (colIdx >=0) {
+			return deleteColumnImpl(sheet, colIdx);
+		}
+		return false;
+	}
+	
+	private Boolean deleteColumnImpl(XSSFSheet sheet, int columnToDelete) {
+	    for (int rId = 0; rId <= sheet.getLastRowNum(); rId++) {
+	        Row row = sheet.getRow(rId);
+	        for (int cID = columnToDelete; cID <= row.getLastCellNum(); cID++) {
+	        	Cell cOld = row.getCell(cID);	        		           
+	            if (cOld != null) {
+	                row.removeCell(cOld);
+	            }
+	            Cell cNext = row.getCell(cID + 1);
+	            if (cNext != null) {
+	                Cell cNew = row.createCell(cID, cNext.getCellTypeEnum());
+	                cloneCell(cNext, cNew);
+	                //Set the column width only on the first row.
+	                //Other wise the second row will overwrite the original column width set previously.
+	                if(rId == 0) {
+	                    sheet.setColumnWidth(cID, sheet.getColumnWidth(cID + 1));
+
+	                }
+	            }
+	        }
+	    }
+	    return true;
+	}
+
+	private int getNumberOfRows(XSSFSheet sheet) {			
+		int rowNum = sheet.getLastRowNum() + 1;
+		return rowNum;
+	}
+
+	public int getNrColumns(XSSFSheet sheet) {		
+		Row headerRow = sheet.getRow(0);
+		return headerRow.getLastCellNum();		
+	}
+	
+	public void insertNewColumnBefore(XSSFSheet sheet, int columnIndex) {
+		FormulaEvaluator evaluator = _workbook.getCreationHelper()
+				.createFormulaEvaluator();
+		evaluator.clearAllCachedResultValues();
+		
+		int nrRows = getNumberOfRows(sheet);
+		int nrCols = getNrColumns(sheet);
+		
+		for (int row = 0; row < nrRows; row++) {
+			Row r = sheet.getRow(row);
+
+			if (r == null) {
+				continue;
+			}
+
+			// shift to right
+			for (int col = nrCols; col > columnIndex; col--) {
+				Cell rightCell = r.getCell(col);
+				if (rightCell != null) {
+					r.removeCell(rightCell);
+				}
+
+				Cell leftCell = r.getCell(col - 1);
+
+				if (leftCell != null) {
+					Cell newCell = r.createCell(col, leftCell.getCellTypeEnum());
+					cloneCell(newCell, leftCell);
+					/*if (newCell.getCellTypeEnum() == CellType.FORMULA) {
+						newCell.setCellFormula(ExcelHelper.updateFormula(newCell.getCellFormula(), columnIndex));
+						evaluator.notifySetFormula(newCell);
+						CellValue cellValue = evaluator.evaluate(newCell);
+						evaluator.evaluateFormulaCell(newCell);						
+					}*/
+				}
+			}
+
+			// delete old column
+			CellType cellType = CellType.BLANK;
+
+			Cell currentEmptyWeekCell = r.getCell(columnIndex);
+			if (currentEmptyWeekCell != null) {
+//				cellType = currentEmptyWeekCell.getCellType();
+				r.removeCell(currentEmptyWeekCell);
+			}
+
+			// create new column
+			r.createCell(columnIndex, cellType);
+		}
+
+		// Adjust the column widths
+		for (int col = nrCols; col > columnIndex; col--) {
+			sheet.setColumnWidth(col, sheet.getColumnWidth(col - 1));
+		}
+
+		// currently updates formula on the last cell of the moved column
+		// TODO: update all cells if their formulas contain references to the moved cell
+//		Row specialRow = sheet.getRow(nrRows-1);
+//		Cell cellFormula = specialRow.createCell(nrCols - 1);
+//		cellFormula.setCellType(XSSFCell.CELL_TYPE_FORMULA);
+//		cellFormula.setCellFormula(formula);
+
+		//XSSFFormulaEvaluator.evaluateAllFormulaCells(workbook);
+	}
+	
+	/*
+	 * Takes an existing Cell and merges all the styles and forumla into the new
+	 * one
+	 */
+	private static void cloneCell(Cell cNew, Cell cOld) {
+		cNew.setCellComment(cOld.getCellComment());
+		cNew.setCellStyle(cOld.getCellStyle());
+	
+		switch (cOld.getCellType()) {
+		case Cell.CELL_TYPE_BOOLEAN: {
+			cNew.setCellValue(cOld.getBooleanCellValue());
+			break;
+		}
+		case Cell.CELL_TYPE_NUMERIC: {
+			cNew.setCellValue(cOld.getNumericCellValue());
+			break;
+		}
+		case Cell.CELL_TYPE_STRING: {
+			cNew.setCellValue(cOld.getStringCellValue());
+			break;
+		}
+		case Cell.CELL_TYPE_ERROR: {
+			cNew.setCellValue(cOld.getErrorCellValue());
+			break;
+		}
+		case Cell.CELL_TYPE_FORMULA: {
+			cNew.setCellFormula(cOld.getCellFormula());
+			break;
+		}
+		}
+	}
+
+	@Override
+	public Boolean deleteSheet(int sheetIdx) {
+		if (_workbook.getNumberOfSheets() > sheetIdx) {
+			_workbook.removeSheetAt(sheetIdx);
+			return true;
+		}
+		return false;			
+	}
+
+	@Override
+	public Boolean deleteSheet(String sheetName) {		
+		if (_workbook.getSheetIndex(sheetName) >= 0) {			
+			_workbook.removeSheetAt(_workbook.getSheetIndex(sheetName));
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public Boolean toggleColumn(IExcelWorksheet worksheet, int colIdx, Boolean visible) {
+		XSSFSheet sheet = _workbook.getSheet(worksheet.getName());
+		if (sheet != null) {
+			sheet.setColumnHidden(colIdx, !visible);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public Boolean toggleRow(IExcelWorksheet worksheet, int i, Boolean visible) {
+		XSSFSheet sheet = _workbook.getSheet(worksheet.getName());
+		if (sheet != null) {			
+			XSSFRow row = sheet.getRow(i);
+			if (row != null) {
+				CellStyle style = _workbook.createCellStyle();
+				style.setHidden(!visible); //Does not work..
+				row.setRowStyle(style);
+				row.setZeroHeight(!visible);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
 	
 	/*@Override	
 	public Boolean setCurrentWorksheetByName(String sheetName)

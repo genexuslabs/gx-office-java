@@ -17,6 +17,8 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder.BorderSide;
+import org.apache.poi.ss.usermodel.BorderStyle;
 
 import com.genexus.GXutil;
 import com.genexus.diagnostics.core.ILogger;
@@ -26,6 +28,8 @@ import com.genexus.office.IExcelCellRange;
 import com.genexus.office.exception.ExcelException;
 import com.genexus.office.exception.ExcelReadonlyException;
 import com.genexus.office.style.ExcelAlignment;
+import com.genexus.office.style.ExcelBorder;
+import com.genexus.office.style.ExcelCellBorder;
 import com.genexus.office.style.ExcelColor;
 import com.genexus.office.style.ExcelFill;
 import com.genexus.office.style.ExcelFont;
@@ -132,7 +136,8 @@ public class ExcelCells implements IExcelCellRange {
 
 		try {
 			for (int i = 1; i <= cellCount; i++) {
-				pCells[i].setCellValue(value);				
+
+				pCells[i].setCellValue(value);
 			}
 			return true;
 
@@ -249,20 +254,20 @@ public class ExcelCells implements IExcelCellRange {
 		try {
 			CellType cType = pCells[1].getCellTypeEnum();
 			switch (cType) {
-				case FORMULA:
-					String type = getFormulaType();
-					if (type == "N")
-						value = new BigDecimal(pCells[1].getNumericCellValue());
-					else if (type == "D")
-						value = new BigDecimal(getDate().getTime());			
-					break;
-				case BOOLEAN:
-					Boolean b = pCells[1].getBooleanCellValue();
-					value = new BigDecimal((b)? 1:0);
-					break;
-				default:
+			case FORMULA:
+				String type = getFormulaType();
+				if (type == "N")
 					value = new BigDecimal(pCells[1].getNumericCellValue());
-			}			
+				else if (type == "D")
+					value = new BigDecimal(getDate().getTime());
+				break;
+			case BOOLEAN:
+				Boolean b = pCells[1].getBooleanCellValue();
+				value = new BigDecimal((b) ? 1 : 0);
+				break;
+			default:
+				value = new BigDecimal(pCells[1].getNumericCellValue());
+			}
 		} catch (Exception e) {
 			throw new ExcelException(7, "Invalid cell value");
 		}
@@ -909,15 +914,15 @@ public class ExcelCells implements IExcelCellRange {
 		if (cellCount > 0) {
 			XSSFCellStyle oldStyle = (XSSFCellStyle) pCells[1].getCellStyle();
 			XSSFCellStyle style = pWorkbook.createCellStyle();
-			
-			style.cloneStyleFrom(style);			
+
+			style.cloneStyleFrom(style);
 			applyNewCellStyle(style, newCellStyle);
-			for (int i = 1; i <= cellCount; i++) {					
+			for (int i = 1; i <= cellCount; i++) {
 				pCells[i].setCellStyle(style);
 			}
 		}
 		return cellCount > 0;
-		
+
 	}
 
 	private XSSFColor toColor(ExcelColor color) {
@@ -927,7 +932,7 @@ public class ExcelCells implements IExcelCellRange {
 	private XSSFCellStyle applyNewCellStyle(XSSFCellStyle cellStyle, ExcelStyle newCellStyle) {
 		ExcelFont cellFont = newCellStyle.getCellFont();
 		if (cellFont != null && cellFont.isDirty()) {
-			//XSSFFont cellStyleFont = cellStyle.getFont();
+			// XSSFFont cellStyleFont = cellStyle.getFont();
 			XSSFFont cellStyleFont = pWorkbook.createFont();
 			cellStyle.setFont(cellStyleFont);
 			ExcelFont font = newCellStyle.getCellFont();
@@ -951,7 +956,7 @@ public class ExcelCells implements IExcelCellRange {
 					cellStyleFont.setUnderline((byte) (font.getUnderline() ? 1 : 0));
 				}
 				if (font.getColor() != null && font.getColor().isDirty()) {
-					cellStyleFont.setColor(toColor(font.getColor()));					
+					cellStyleFont.setColor(toColor(font.getColor()));
 				}
 			}
 		}
@@ -998,13 +1003,53 @@ public class ExcelCells implements IExcelCellRange {
 
 				cellStyle.setVerticalAlignment(align);
 			}
-
 		}
+
 		if (newCellStyle.isLocked() != null) {
 			cellStyle.setLocked(newCellStyle.isLocked());
+		}
+
+		if (newCellStyle.getShrinkToFit() != null) {
+			cellStyle.setShrinkToFit(newCellStyle.getShrinkToFit());
+		}
+
+		if (newCellStyle.getWrapText() != null) {
+			cellStyle.setWrapText(newCellStyle.getWrapText());
+		}
+
+		if (newCellStyle.getTextRotation() > 0) {
+			cellStyle.setRotation((short) newCellStyle.getTextRotation());
+		}
+
+		if (newCellStyle.getBorder() != null) {
+			ExcelCellBorder cellborder = newCellStyle.getBorder();
+			applyBorderSide(cellStyle, BorderSide.TOP, cellborder.getBorderTop());
+			applyBorderSide(cellStyle, BorderSide.BOTTOM, cellborder.getBorderBottom());
+			applyBorderSide(cellStyle, BorderSide.LEFT, cellborder.getBorderLeft());
+			applyBorderSide(cellStyle, BorderSide.RIGHT, cellborder.getBorderRight());
 		}
 
 		return cellStyle;
 
 	}
+
+	private void applyBorderSide(XSSFCellStyle cellStyle, BorderSide bSide, ExcelBorder border) {
+		if (border != null && border.isDirty()) {
+			if (border.getBorderColor().isDirty())
+				cellStyle.setBorderColor(bSide, toColor(border.getBorderColor()));
+			if (border.getBorder() != null && border.getBorder().length() > 0) {
+				BorderStyle bs = BorderStyle.valueOf(border.getBorder());
+				if (bSide == BorderSide.BOTTOM) {
+					cellStyle.setBorderBottom(bs);
+				} else if (bSide == BorderSide.TOP) {
+					cellStyle.setBorderTop(bs);
+				} else if (bSide == BorderSide.LEFT) {
+					cellStyle.setBorderLeft(bs);
+				} else if (bSide == BorderSide.RIGHT) {
+				}
+				cellStyle.setBorderRight(bs);
+			}
+		}
+	}
+
 }

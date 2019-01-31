@@ -5,6 +5,11 @@ public class ExcelStyle extends ExcelStyleDimension
 	private ExcelFill _cellFill;
 	private ExcelFont _cellFont;
 	private Boolean _locked;
+	private Boolean _wrapText;
+	private Boolean _shrinkToFit;
+	private ExcelCellBorder _borders;
+	
+	private int _textRotation;
 	
 	/*private ExcelBorder _cellLeftBorder;
 	private ExcelBorder _cellRightBorder;
@@ -16,6 +21,7 @@ public class ExcelStyle extends ExcelStyleDimension
 		_cellFill = new ExcelFill();
 		_cellFont = new ExcelFont();
 		_cellAlignment = new ExcelAlignment();
+		_borders = new ExcelCellBorder();
 		/*_cellLeftBorder = new ExcelBorder();
 		_cellRightBorder = new ExcelBorder();
 		_cellTopBorder = new ExcelBorder(); 
@@ -48,6 +54,38 @@ public class ExcelStyle extends ExcelStyleDimension
 	@Override
 	public boolean isDirty() {
 		return super.isDirty() || _cellFill.isDirty() || _cellFont.isDirty() || _cellAlignment.isDirty();
+	}
+
+	public Boolean getWrapText() {
+		return _wrapText;
+	}
+
+	public void setWrapText(Boolean _wrapText) {
+		this._wrapText = _wrapText;
+	}
+
+	public Boolean getShrinkToFit() {
+		return _shrinkToFit;
+	}
+
+	public void setShrinkToFit(Boolean _shrinkToFit) {
+		this._shrinkToFit = _shrinkToFit;
+	}
+	
+	public int getTextRotation() {
+		return _textRotation;
+	}
+
+	public void setTextRotation(int _textRotation) {
+		this._textRotation = _textRotation;
+	}
+
+	public ExcelCellBorder getBorder() {
+		return _borders;
+	}
+
+	public void setBorder(ExcelCellBorder _borders) {
+		this._borders = _borders;
 	}
 	
 }

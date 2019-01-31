@@ -31,6 +31,23 @@ public class AppTest
 	 */
 	
 	@Test
+	public void testFormatoNumero()
+	{
+		String excel1 = basePath + "testFormatoNumero";
+		deletefile(excel1 + ".xlsx");
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel1);
+		
+		excel.getCells(1, 1, 1, 1).setNumericValue(new java.math.BigDecimal(123.456));
+		excel.getCells(2, 1, 1, 1).setNumericValue(new java.math.BigDecimal(1));
+		excel.getCells(3, 1, 1, 1).setNumericValue(new java.math.BigDecimal(100));
+		
+		excel.getCells(4, 1, 1, 1).setNumericValue(new java.math.BigDecimal(0.123));
+		excel.save();
+
+	}
+	
+	@Test
 	public void testjapan1()
 	{
 		String excel1 = basePath + "test_japan1";
@@ -104,7 +121,7 @@ public class AppTest
 		excel.save();
 
 	}
-	
+	/*
 	@Test
 	public void testXLSExtension()
 	{
@@ -122,7 +139,7 @@ public class AppTest
 		
 		excel.save();
 		excel.close();
-	}
+	}*/
 	
 	@Test
 	public void testInsertSheet()
@@ -175,6 +192,7 @@ public class AppTest
 	{
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		String excel2 = basePath + "excel2.xlsx";
+		deletefile(excel2);
 		excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel2);
 		excel.setAutofit(true);
@@ -457,18 +475,24 @@ public class AppTest
        
        ExcelStyle style = new ExcelStyle();
        
-       cells.setText("texto1");
+       cells.setText("texto muy largo");
        style.getCellAlignment().setHorizontalAlignment(3);
        style.getCellFont().setBold(true);
-       style.getCellFont().setStrike(true);
+       //style.getCellFont().setStrike(true);
        style.getCellFont().setItalic(true);
-       style.getCellFont().setSize(30);
+       style.getCellFont().setSize(18);
        style.getCellFont().getColor().setColorRGB(1,1,1);
        //style.getCellFont().getColor().setColorARGB(0, 50, 100, 180);
-       style.getCellFill().getCellBackColor().setColorRGB(210,180,140);       
-       cells.setCellStyle(style);
-    
+       style.getCellFill().getCellBackColor().setColorRGB(210,180,140);      
+       style.setTextRotation(5);
+       style.setWrapText(true);
+    //   style.setLocked(true);
        
+       cells.setCellStyle(style);
+       excel.setColumnWidth(1, 70);
+       //excel.setColumnWidth(2, 60);
+       excel.setRowHeight(1, 45);
+       excel.setRowHeight(2, 45);
               
        cells = excel.getCells(5, 2, 4, 4);
        
@@ -485,6 +509,7 @@ public class AppTest
        cells = excel.getCells(10, 2, 2,2);       
        cells.setText("texto3");
        style = new ExcelStyle();
+    //   style.setHidden(true);
        style.getCellFont().setBold(false);
        style.getCellFont().setSize(10);
        style.getCellFont().getColor().setColorRGB(180,180,180);
@@ -496,6 +521,166 @@ public class AppTest
        excel.save();
        excel.close();
        
+	}
+	
+	
+	@Test	
+	public void testExcelBorderStyle() {
+	   ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();		
+	   String excelPath = basePath + "excelBorderStyle.xlsx";  
+	   deletefile(excelPath);      
+       excel = new ExcelSpreadsheetGXWrapper();   
+       excel.open(excelPath);
+       IExcelCellRange cells = excel.getCells(1, 1, 2, 2);
+       
+       ExcelStyle style = new ExcelStyle();
+                         
+       cells = excel.getCells(5, 2, 4, 4);
+       
+       cells.setText("texto2");
+       style = new ExcelStyle();             
+       style.getCellFont().setSize(10);
+       
+       style.getBorder().getBorderTop().setBorder("THICK");
+       style.getBorder().getBorderTop().getBorderColor().setColorRGB(220, 20, 60);
+       
+       style.getBorder().getBorderLeft().setBorder("DASH_DOT");
+       style.getBorder().getBorderLeft().getBorderColor().setColorRGB(50, 50, 50);
+       cells.setCellStyle(style);
+       
+       
+       cells = excel.getCells(10, 2, 2,2);       
+       cells.setText("texto3");
+       style = new ExcelStyle();
+        
+       style.getCellFont().setBold(false);
+       style.getCellFont().setSize(10);
+       style.getCellFont().getColor().setColorRGB(180,180,180);
+               
+       cells.setCellStyle(style);
+       
+       
+       excel.save();
+       excel.close();
+       
+	}
+	
+	@Test
+	public void testDeleteRow()
+	{
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		String excel2 = basePath + "exceldeleterow.xlsx";
+		deletefile(excel2);
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel2);
+		
+		excel.getCell(1, 1).setNumericValue(new java.math.BigDecimal(5));
+		excel.getCell(2, 1).setNumericValue(new java.math.BigDecimal(6));
+		excel.getCell(3, 1).setText("=A1+A2");
+		excel.save();
+		excel.close();
+		// Verify previous Excel Document
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel2);
+
+		assertEquals(11, excel.getCell(3, 1).getNumericValue().intValue());
+		excel.deleteRow(3);
+		assertEquals(0, excel.getCell(3, 1).getNumericValue().intValue());
+		excel.save();
+	}
+	
+	
+	@Test
+	public void testHideRow()
+	{
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		String excel2 = basePath + "excelhiderow.xlsx";
+		deletefile(excel2);
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel2);
+		
+		excel.getCell(1, 1).setNumericValue(new java.math.BigDecimal(1));
+		
+		excel.getCell(2, 1).setNumericValue(new java.math.BigDecimal(2));
+		
+		excel.getCell(3, 1).setNumericValue(new java.math.BigDecimal(3));
+		
+		excel.save();
+		excel.close();
+		// Verify previous Excel Document
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel2);
+
+		assertEquals(1, excel.getCell(1, 1).getNumericValue().intValue());
+		excel.toggleRow(2, false);
+		//assertEquals(7, excel.getCell(1, 1).getNumericValue().intValue());
+		excel.save();
+	}
+	
+	@Test
+	public void testHideColumn()
+	{
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		String excel2 = basePath + "excelhidecolumn.xlsx";
+		deletefile(excel2);
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel2);
+		
+		excel.getCell(1, 1).setNumericValue(new java.math.BigDecimal(1));
+		excel.getCell(2, 1).setNumericValue(new java.math.BigDecimal(1));
+		excel.getCell(3, 1).setNumericValue(new java.math.BigDecimal(1));
+		
+		excel.getCell(1, 2).setNumericValue(new java.math.BigDecimal(2));
+		excel.getCell(2, 2).setNumericValue(new java.math.BigDecimal(2));
+		excel.getCell(3, 2).setNumericValue(new java.math.BigDecimal(2));
+		
+		excel.getCell(1, 3).setNumericValue(new java.math.BigDecimal(3));
+		excel.getCell(2, 3).setNumericValue(new java.math.BigDecimal(3));
+		excel.getCell(3, 3).setNumericValue(new java.math.BigDecimal(3));
+		
+		excel.save();
+		excel.close();
+		// Verify previous Excel Document
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel2);
+
+		assertEquals(1, excel.getCell(2, 1).getNumericValue().intValue());
+		excel.toggleColumn(2, false);
+		//assertEquals(7, excel.getCell(1, 1).getNumericValue().intValue());
+		excel.save();
+	}
+	
+	@Test
+	public void testDeleteColumn()
+	{
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		String excel2 = basePath + "exceldeletecolumn.xlsx";
+		deletefile(excel2);
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel2);
+		
+		excel.getCell(1, 1).setNumericValue(new java.math.BigDecimal(1));
+		excel.getCell(2, 1).setNumericValue(new java.math.BigDecimal(1));
+		excel.getCell(3, 1).setNumericValue(new java.math.BigDecimal(1));
+		
+		excel.getCell(1, 2).setNumericValue(new java.math.BigDecimal(2));
+		excel.getCell(2, 2).setNumericValue(new java.math.BigDecimal(2));
+		excel.getCell(3, 2).setNumericValue(new java.math.BigDecimal(2));
+		
+		excel.getCell(1, 3).setNumericValue(new java.math.BigDecimal(3));
+		excel.getCell(2, 3).setNumericValue(new java.math.BigDecimal(3));
+		excel.getCell(3, 3).setNumericValue(new java.math.BigDecimal(3));
+		
+		excel.save();
+		excel.close();
+		// Verify previous Excel Document
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel2);
+
+	//	assertEquals(6, excel.getCell(2, 1).getNumericValue().intValue());
+		excel.deleteColumn(2);
+		//assertEquals(7, excel.getCell(1, 1).getNumericValue().intValue());
+		excel.save();
 	}
 	
 	@Test

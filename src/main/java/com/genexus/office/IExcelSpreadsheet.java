@@ -27,7 +27,7 @@ public interface IExcelSpreadsheet
 	// Columns not supported
 	// public Boolean insertColumn(IExcelWorksheet worksheet, int rowIdx, int
 	// colIdx);
-	// public Boolean deleteColumn(IExcelWorksheet worksheet, int colIdx);
+	public Boolean deleteColumn(IExcelWorksheet worksheet, int colIdx);
 
 	// Worksheets
 	public List<ExcelWorksheet> getWorksheets();
@@ -41,5 +41,15 @@ public interface IExcelSpreadsheet
 	public void setRowHeight(IExcelWorksheet worksheet, int rowIdx, int height);
 
 	boolean setActiveWorkSheet(String name);
+
+	public Boolean deleteSheet(int sheetIdx);
+
+	public Boolean deleteSheet(String sheetName);
+
+	public Boolean toggleColumn(IExcelWorksheet worksheet, int colIdx, Boolean visible);
+
+	public Boolean toggleRow(IExcelWorksheet _currentWorksheet, int i, Boolean visible);
+
+
 	
 }
