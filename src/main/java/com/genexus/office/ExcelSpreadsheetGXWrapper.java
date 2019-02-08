@@ -25,7 +25,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	private IExcelSpreadsheet _document;
 	private Boolean _isReadonly = false;
 	private Boolean _autofit = false;
-
+	private final String DEFAULT_SHEET_NAME = "Sheet";
 	public Boolean getAutofit() {
 		return _autofit;
 	}
@@ -37,8 +37,13 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 		}
 	}
 
-	private Boolean isOK() {
-		boolean ok = selectFirstSheet();
+	private Boolean initialize() {
+		
+		return initialize(DEFAULT_SHEET_NAME);
+	}
+	
+	private Boolean initialize(String defaultSheetName) {
+		boolean ok = selectFirstDefaultSheet(defaultSheetName);
 		if (!ok) {
 			setErrCod((short) 1);
 			setErrDes("Could not get/set first Sheet on Document");
@@ -72,7 +77,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	}
 
 	public Boolean save() {
-		if (isOK()) {
+		if (initialize()) {
 			try {
 				_document.save();
 			} catch (ExcelException e) {
@@ -92,7 +97,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	}
 
 	private Boolean saveAsImpl(String newFileName, String password) {
-		if (isOK()) {
+		if (initialize()) {
 			try {
 				_document.saveAs(newFileName);
 
@@ -104,7 +109,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	}
 
 	public ExcelCells getCell(int rowIdx, int colIdx) {
-		if (isOK()) {
+		if (initialize()) {
 			try {
 				return (ExcelCells) _document.getCell(_currentWorksheet, rowIdx, colIdx);
 			} catch (ExcelException e) {
@@ -125,7 +130,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	}
 
 	public ExcelCells getCells(int rowIdx, int colIdx, int rowCount, int colCount) {
-		if (isOK()) {
+		if (initialize()) {
 			try {
 				return (ExcelCells) _document.getCells(_currentWorksheet, rowIdx, colIdx, rowCount, colCount);
 			} catch (ExcelException e) {
@@ -136,7 +141,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	}
 
 	public Boolean setCurrentWorksheet(int sheetIdx) {
-		if (isOK() && _document.getWorksheets().size() >= sheetIdx) {
+		if (initialize() && _document.getWorksheets().size() >= sheetIdx) {
 			_currentWorksheet = _document.getWorksheets().get(sheetIdx);
 			if (_currentWorksheet != null) {
 				_document.setActiveWorkSheet(_currentWorksheet.getName());
@@ -147,7 +152,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	}
 
 	public Boolean setCurrentWorksheetByName(String sheetName) {
-		if (isOK()) {
+		if (initialize()) {
 			ExcelWorksheet ws = _document.getWorkSheet(sheetName);
 			if (ws != null) {
 				_currentWorksheet = ws;
@@ -159,7 +164,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	}
 
 	public Boolean insertRow(int rowIdx, int rowCount) {
-		if (isOK()) {
+		if (initialize()) {
 			return _document.insertRow(_currentWorksheet, rowIdx - 1, rowCount);
 		}
 		return false;
@@ -174,42 +179,42 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	}
 
 	public Boolean deleteRow(int rowIdx) {
-		if (isOK()) {
+		if (initialize()) {
 			return _document.deleteRow(_currentWorksheet, rowIdx - 1);
 		}
 		return false;
 	}
 
 	public Boolean deleteColumn(int colIdx) {
-		if (isOK()) {
+		if (initialize()) {
 			return _document.deleteColumn(_currentWorksheet, colIdx - 1);
 		}
 		return false;
 	}
 
 	public Boolean insertSheet(String sheetName) {
-		if (isOK()) {
+		if (initialize(sheetName)) {
 			return _document.insertWorksheet(sheetName, 0);
 		}
 		return false;
 	}
 	
 	public Boolean toggleColumn(int colIdx, Boolean visible) {
-		if (isOK()) {
+		if (initialize()) {
 			return _document.toggleColumn(_currentWorksheet, colIdx - 1, visible);
 		}
 		return false;
 	}
 	
 	public Boolean toggleRow(int rowIdx, Boolean visible) {
-		if (isOK()) {
+		if (initialize()) {
 			return _document.toggleRow(_currentWorksheet, rowIdx - 1, visible);
 		}
 		return false;
 	}
 	
 	public Boolean deleteSheet(String sheetName) {
-		if (isOK()) {
+		if (initialize()) {
 			ExcelWorksheet ws = _document.getWorkSheet(sheetName);
 			if (ws != null)
 				return _document.deleteSheet(sheetName);
@@ -219,7 +224,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	}
 	
 	public Boolean deleteSheet(int sheetIdx) {
-		if (isOK()) {
+		if (initialize()) {
 			if (_document.getWorksheets().size() >= sheetIdx)
 				return _document.deleteSheet(sheetIdx - 1);
 		}
@@ -229,7 +234,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	
 
 	public Boolean close() {
-		if (isOK()) {
+		if (initialize()) {
 			try {
 				_document.close();
 			} catch (ExcelException e) {
@@ -257,7 +262,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	}
 
 	public ExcelWorksheet getCurrentWorksheet() {
-		if (isOK()) {
+		if (initialize()) {
 			return (ExcelWorksheet) _currentWorksheet;
 		}
 		return null;
@@ -265,20 +270,20 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	}
 
 	public List<ExcelWorksheet> getWorksheets() {
-		if (isOK())
+		if (initialize())
 			return _document.getWorksheets();
 		else
 			return new ArrayList<ExcelWorksheet>();
 	}
 
-	private boolean selectFirstSheet() {
+	private boolean selectFirstDefaultSheet(String sheetName) {
 		if (_document != null) {
 			int sheetsCount = _document.getWorksheets().size();
 			if (sheetsCount == 0 && _isReadonly) {
 				return true;
 			}
 			if (sheetsCount == 0) {
-				_document.insertWorksheet("Sheet", 0);
+				_document.insertWorksheet(sheetName, 0);
 			}
 			if (_currentWorksheet == null)
 				_currentWorksheet = _document.getWorksheets().get(0);
@@ -287,13 +292,13 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	}
 
 	public void setColumnWidth(int colIdx, int width) {
-		if (isOK() && colIdx > 0) {
+		if (colIdx > 0 && initialize()) {
 			_document.setColumnWidth(_currentWorksheet, colIdx, width);
 		}
 	}
 
 	public void setRowHeight(int rowIdx, int height) {
-		if (isOK() && rowIdx > 0) {
+		if (rowIdx > 0 && initialize()) {
 			_document.setRowHeight(_currentWorksheet, rowIdx, height);
 		}
 	}

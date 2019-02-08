@@ -113,10 +113,10 @@ public class AppTest
 		excel.insertSheet("genexus2");
 
 		List<ExcelWorksheet> wSheets = excel.getWorksheets();
-		assertTrue(wSheets.size() == 4);
-		assertTrue(wSheets.get(1).getName() == "genexus0");
-		assertTrue(wSheets.get(2).getName() == "genexus1");
-		assertTrue(wSheets.get(3).getName() == "genexus2");
+		assertTrue(wSheets.size() == 3);
+		assertTrue(wSheets.get(0).getName() == "genexus0");
+		assertTrue(wSheets.get(1).getName() == "genexus1");
+		assertTrue(wSheets.get(2).getName() == "genexus2");
 
 		excel.save();
 
@@ -153,10 +153,10 @@ public class AppTest
 		excel.insertSheet("genexus2");
 
 		List<ExcelWorksheet> wSheets = excel.getWorksheets();
-		assertTrue(wSheets.size() == 4);
-		assertTrue(wSheets.get(1).getName() == "genexus0");
-		assertTrue(wSheets.get(2).getName() == "genexus1");
-		assertTrue(wSheets.get(3).getName() == "genexus2");
+		assertTrue(wSheets.size() == 3);
+		assertTrue(wSheets.get(0).getName() == "genexus0");
+		assertTrue(wSheets.get(1).getName() == "genexus1");
+		assertTrue(wSheets.get(2).getName() == "genexus2");
 
 		excel.save();
 
@@ -176,14 +176,14 @@ public class AppTest
 		excel.insertSheet("gx4");
 
 		List<ExcelWorksheet> wSheets = excel.getWorksheets();
-		assertTrue(wSheets.size() == 5);
-		assertTrue(wSheets.get(1).getName() == "gx1");
-		assertTrue(wSheets.get(2).getName() == "gx2");
-		assertTrue(wSheets.get(3).getName() == "gx3");
-		excel.deleteSheet(2);
-		wSheets = excel.getWorksheets();
+		assertTrue(wSheets.size() == 4);
+		assertTrue(wSheets.get(0).getName() == "gx1");
 		assertTrue(wSheets.get(1).getName() == "gx2");
 		assertTrue(wSheets.get(2).getName() == "gx3");
+		excel.deleteSheet(2);
+		wSheets = excel.getWorksheets();
+		assertTrue(wSheets.get(0).getName() == "gx1");
+		assertTrue(wSheets.get(1).getName() == "gx3");
 		excel.save();
 
 	}
