@@ -221,7 +221,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	public Boolean deleteSheet(int sheetIdx) {
 		if (isOK()) {
 			if (_document.getWorksheets().size() >= sheetIdx)
-				return _document.deleteSheet(sheetIdx);
+				return _document.deleteSheet(sheetIdx - 1);
 		}
 		setError(2, "Sheet not found");
 		return false;

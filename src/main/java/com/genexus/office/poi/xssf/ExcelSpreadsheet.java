@@ -158,10 +158,7 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 		{
 			for (int i = 1; i <= rowCount; i++)
 			{
-
-				int lastRow = sheet.getLastRowNum();
-
-				XSSFRow newRow = sheet.createRow(createNewRowAt);
+				int lastRow = sheet.getLastRowNum();			
 				sheet.shiftRows(createNewRowAt, lastRow, 1, true, false);
 			}
 			return true;
@@ -330,7 +327,7 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 	            Cell cNext = row.getCell(cID + 1);
 	            if (cNext != null) {
 	                Cell cNew = row.createCell(cID, cNext.getCellTypeEnum());
-	                cloneCell(cNext, cNew);
+	                cloneCell(cNew, cNext);
 	                //Set the column width only on the first row.
 	                //Other wise the second row will overwrite the original column width set previously.
 	                if(rId == 0) {

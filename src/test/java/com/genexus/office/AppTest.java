@@ -162,6 +162,32 @@ public class AppTest
 
 	}
 
+	
+	@Test
+	public void testDeleteSheet()
+	{
+		String excel1 = basePath + "test_delete_sheet.xlsx";
+		deletefile(excel1);
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel1);
+		excel.insertSheet("gx1");
+		excel.insertSheet("gx2");
+		excel.insertSheet("gx3");
+		excel.insertSheet("gx4");
+
+		List<ExcelWorksheet> wSheets = excel.getWorksheets();
+		assertTrue(wSheets.size() == 5);
+		assertTrue(wSheets.get(1).getName() == "gx1");
+		assertTrue(wSheets.get(2).getName() == "gx2");
+		assertTrue(wSheets.get(3).getName() == "gx3");
+		excel.deleteSheet(2);
+		wSheets = excel.getWorksheets();
+		assertTrue(wSheets.get(1).getName() == "gx2");
+		assertTrue(wSheets.get(2).getName() == "gx3");
+		excel.save();
+
+	}
+	
 	@Test
 	public void testSetCellValues()
 	{
@@ -471,6 +497,7 @@ public class AppTest
 	   deletefile(excelPath);      
        excel = new ExcelSpreadsheetGXWrapper();   
        excel.open(excelPath);
+       
        IExcelCellRange cells = excel.getCells(1, 1, 2, 2);
        
        ExcelStyle style = new ExcelStyle();
@@ -563,6 +590,32 @@ public class AppTest
        excel.save();
        excel.close();
        
+	}
+	
+	@Test
+	public void testInsertRow()
+	{
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		String excel2 = basePath + "excelInsertRow.xlsx";
+		deletefile(excel2);
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel2);
+		
+		excel.getCell(1, 1).setNumericValue(new java.math.BigDecimal(1));
+		excel.getCell(2, 1).setNumericValue(new java.math.BigDecimal(2));
+		excel.getCell(3, 1).setNumericValue(new java.math.BigDecimal(3));
+		excel.getCell(4, 1).setNumericValue(new java.math.BigDecimal(4));
+		excel.getCell(5, 1).setNumericValue(new java.math.BigDecimal(5));
+		excel.save();
+		excel.close();
+		// Verify previous Excel Document
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel2);
+
+		assertEquals(2, excel.getCell(2, 1).getNumericValue().intValue());
+		excel.insertRow(2, 2);
+		assertEquals(2, excel.getCell(4, 1).getNumericValue().intValue());
+		excel.save();
 	}
 	
 	@Test
@@ -677,9 +730,9 @@ public class AppTest
 		excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel2);
 
-	//	assertEquals(6, excel.getCell(2, 1).getNumericValue().intValue());
+		assertEquals(2, excel.getCell(2, 2).getNumericValue().intValue());
 		excel.deleteColumn(2);
-		//assertEquals(7, excel.getCell(1, 1).getNumericValue().intValue());
+		assertEquals(3, excel.getCell(2, 2).getNumericValue().intValue());
 		excel.save();
 	}
 	
