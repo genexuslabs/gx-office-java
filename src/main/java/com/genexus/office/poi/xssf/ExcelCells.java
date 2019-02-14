@@ -1028,9 +1028,7 @@ public class ExcelCells implements IExcelCellRange {
 			applyBorderSide(cellStyle, BorderSide.LEFT, cellborder.getBorderLeft());
 			applyBorderSide(cellStyle, BorderSide.RIGHT, cellborder.getBorderRight());
 		}
-
 		return cellStyle;
-
 	}
 
 	private void applyBorderSide(XSSFCellStyle cellStyle, BorderSide bSide, ExcelBorder border) {
@@ -1046,8 +1044,9 @@ public class ExcelCells implements IExcelCellRange {
 				} else if (bSide == BorderSide.LEFT) {
 					cellStyle.setBorderLeft(bs);
 				} else if (bSide == BorderSide.RIGHT) {
+					cellStyle.setBorderRight(bs);
 				}
-				cellStyle.setBorderRight(bs);
+				
 			}
 		}
 	}

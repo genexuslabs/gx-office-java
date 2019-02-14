@@ -54,7 +54,10 @@ public class ExcelWorksheet implements IExcelWorksheet
 	@Override
 	public void setProtected(String password) {
 		if (_sheet != null) {
-			_sheet.protectSheet(password);		
+			if (password.length() == 0)
+				_sheet.protectSheet(null);
+			else
+				_sheet.protectSheet(password);		
 		}		
 	}
 

@@ -571,8 +571,8 @@ public class AppTest
        style.getBorder().getBorderTop().setBorder("THICK");
        style.getBorder().getBorderTop().getBorderColor().setColorRGB(220, 20, 60);
        
-       style.getBorder().getBorderLeft().setBorder("DASH_DOT");
-       style.getBorder().getBorderLeft().getBorderColor().setColorRGB(50, 50, 50);
+     //  style.getBorder().getBorderLeft().setBorder("DASH_DOT");
+      // style.getBorder().getBorderLeft().getBorderColor().setColorRGB(50, 50, 50);
        cells.setCellStyle(style);
        
        
