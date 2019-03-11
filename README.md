@@ -1,7 +1,9 @@
 ## GeneXus Office Module for JAVA
 
-##### KB Module Implementation
-- ServerKBAlias: GenexusOfficeModule
-- ServerUri: http://w2012srv/genexusserversalto
+XLSX spreadsheet interoperability for GeneXus based as External Object. 
+Implemented using Apache POI. 
+
+##### How to build
+mvn package
 
 
