@@ -3,7 +3,7 @@
 XLSX spreadsheet interoperability for GeneXus based as External Object. 
 Implemented using Apache POI. 
 
-##### How to build
+### How to build
 mvn package
 
 
