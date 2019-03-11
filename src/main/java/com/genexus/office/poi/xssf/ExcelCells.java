@@ -275,7 +275,7 @@ public class ExcelCells implements IExcelCellRange {
 	}
 
 	public String getType() {
-		String type = "";
+		String type = null;
 		switch (pCells[1].getCellType()) {
 		case XSSFCell.CELL_TYPE_BLANK:
 			type = "U";
@@ -299,6 +299,8 @@ public class ExcelCells implements IExcelCellRange {
 		case XSSFCell.CELL_TYPE_STRING:
 			type = "C";
 			break;
+		default:
+			type = "";				
 		}
 		return type;
 	}
@@ -468,11 +470,15 @@ public class ExcelCells implements IExcelCellRange {
 						pCells[i].setCellStyle(newStyle);
 					}
 					break;
+				default:
+					throw new ExcelException(6, "Invalid font properties");
 				}
+				
+					
 
 			}
 		} catch (Exception e) {
-			throw new ExcelException(6, "Invalid font properties");
+			throw new ExcelException(6, "Invalid bold value");
 		}
 	}
 
@@ -527,6 +533,8 @@ public class ExcelCells implements IExcelCellRange {
 						pCells[i].setCellStyle(newStyle);
 					}
 					break;
+				default:
+					throw new ExcelException(6, "Invalid font properties");
 				}
 			}
 		} catch (Exception e) {
@@ -585,6 +593,8 @@ public class ExcelCells implements IExcelCellRange {
 						pCells[i].setCellStyle(newStyle);
 					}
 					break;
+				default:
+					throw new ExcelException(6, "Invalid font property");
 				}
 			}
 		} catch (Exception e) {
@@ -654,9 +664,8 @@ public class ExcelCells implements IExcelCellRange {
 				if (red != 0 || green != 0 || blue > 56) // Si es value esta entre 1 y 56 entonces supongo que es un
 															// color Index de Excel y voy por el else
 				{
-					if (fontColor == null
-							|| (fontColor != null && (fontColor.getRGB() == null || (fontColor.getRGB()[0] == 0
-									&& fontColor.getRGB()[1] == 0 && fontColor.getRGB()[2] == 0)))) {
+					if ((fontColor != null && (fontColor.getRGB() == null || (fontColor.getRGB()[0] == 0
+							&& fontColor.getRGB()[1] == 0 && fontColor.getRGB()[2] == 0)))) {
 						// System.out.println("Automatic color.");
 
 						if ((red + green + blue) != 0) {
@@ -674,21 +683,23 @@ public class ExcelCells implements IExcelCellRange {
 							pCells[i].setCellStyle(newStyle);
 						}
 					} else {
-						byte[] triplet = fontColor.getRGB();
+						if (fontColor != null) {
+							byte[] triplet = fontColor.getRGB();
 
-						if (triplet[0] != red || triplet[1] != green || triplet[2] != blue) {
-							newColor = new XSSFColor(new java.awt.Color(red, green, blue));
+							if (triplet[0] != red || triplet[1] != green || triplet[2] != blue) {
+								newColor = new XSSFColor(new java.awt.Color(red, green, blue));
 
-							newFont = (XSSFFont) pWorkbook.createFont();
-							copyPropertiesFont(newFont, fontCell);
+								newFont = (XSSFFont) pWorkbook.createFont();
+								copyPropertiesFont(newFont, fontCell);
 
-							newFont.setColor(newColor);
+								newFont.setColor(newColor);
 
-							newStyle = pWorkbook.createCellStyle();
-							copyPropertiesStyle(newStyle, cellStyle);
+								newStyle = pWorkbook.createCellStyle();
+								copyPropertiesStyle(newStyle, cellStyle);
 
-							newStyle.setFont(newFont);
-							pCells[i].setCellStyle(newStyle);
+								newStyle.setFont(newFont);
+								pCells[i].setCellStyle(newStyle);
+							}
 						}
 					}
 				} else {
@@ -727,7 +738,7 @@ public class ExcelCells implements IExcelCellRange {
 				}
 			}
 		} catch (Exception e) {
-			throw new ExcelException(6, "Invalid font properties");
+			throw new ExcelException(6, "Invalid font properties", e);
 		}
 	}
 
@@ -912,7 +923,6 @@ public class ExcelCells implements IExcelCellRange {
 	@Override
 	public Boolean setCellStyle(ExcelStyle newCellStyle) {
 		if (cellCount > 0) {
-			XSSFCellStyle oldStyle = (XSSFCellStyle) pCells[1].getCellStyle();
 			XSSFCellStyle style = pWorkbook.createCellStyle();
 
 			style.cloneStyleFrom(style);
@@ -1046,7 +1056,7 @@ public class ExcelCells implements IExcelCellRange {
 				} else if (bSide == BorderSide.RIGHT) {
 					cellStyle.setBorderRight(bs);
 				}
-				
+
 			}
 		}
 	}

@@ -442,6 +442,9 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 			cNew.setCellFormula(cOld.getCellFormula());
 			break;
 		}
+		default:
+			//ignore
+			break;
 		}
 	}
 

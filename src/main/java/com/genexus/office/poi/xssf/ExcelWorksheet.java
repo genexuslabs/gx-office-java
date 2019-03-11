@@ -35,7 +35,7 @@ public class ExcelWorksheet implements IExcelWorksheet
 		if (_sheet != null) {
 			XSSFWorkbook wb = _sheet.getWorkbook();
 			wb.setSheetName(wb.getSheetIndex(getName()), newName);
-			return getName() == newName;
+			return getName().equals(newName);
 		}
 		return false;
 	}

@@ -36,11 +36,11 @@ public class AppTest
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel1);
 		
-		excel.getCells(1, 1, 1, 1).setNumericValue(new java.math.BigDecimal(123.456));
-		excel.getCells(2, 1, 1, 1).setNumericValue(new java.math.BigDecimal(1));
-		excel.getCells(3, 1, 1, 1).setNumericValue(new java.math.BigDecimal(100));
+		excel.getCells(1, 1, 1, 1).setNumericValue(BigDecimal.valueOf(123.456));
+		excel.getCells(2, 1, 1, 1).setNumericValue(BigDecimal.valueOf(1));
+		excel.getCells(3, 1, 1, 1).setNumericValue(BigDecimal.valueOf(100));
 		
-		excel.getCells(4, 1, 1, 1).setNumericValue(new java.math.BigDecimal(0.123));
+		excel.getCells(4, 1, 1, 1).setNumericValue(BigDecimal.valueOf(0.123));
 		excel.save();
 
 	}
@@ -53,7 +53,7 @@ public class AppTest
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel1);
 		excel.setColumnWidth(1,  100);
-		excel.getCells(2, 1, 1, 5).setNumericValue(new java.math.BigDecimal(123.456));
+		excel.getCells(2, 1, 1, 5).setNumericValue(BigDecimal.valueOf(123.456));
 		ExcelStyle newCellStyle = new ExcelStyle();
 		newCellStyle.getCellFont().setBold(true);
 		excel.getCells(2, 1, 1, 5).setCellStyle(newCellStyle);
@@ -70,7 +70,7 @@ public class AppTest
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel1);
 		excel.setColumnWidth(1,  100);
-		excel.getCells(2, 1, 5, 5).setNumericValue(new java.math.BigDecimal(123.456));
+		excel.getCells(2, 1, 5, 5).setNumericValue(BigDecimal.valueOf(123.456));
 		ExcelStyle newCellStyle = new ExcelStyle();
 		newCellStyle.getCellFont().setBold(true);
 		excel.getCells(2, 1, 3, 3).setCellStyle(newCellStyle);
@@ -87,7 +87,7 @@ public class AppTest
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel1);
 		
-		excel.getCells(2, 1, 5, 5).setNumericValue(new java.math.BigDecimal(123.456));
+		excel.getCells(2, 1, 5, 5).setNumericValue(BigDecimal.valueOf(123.456));
 		excel.insertSheet("test1");
 	
 		excel.insertSheet("test2");
@@ -197,7 +197,7 @@ public class AppTest
 		excel.getCells(1, 1, 1, 1).setNumericValue(new java.math.BigDecimal(100));		
 		excel.getCells(2, 1, 1 , 1).setText("hola!");
 		excel.getCells(3, 1, 1, 1).setDateValue(new Date());
-		excel.getCells(4, 1, 1, 1).setNumericValue(new java.math.BigDecimal(66.78));
+		excel.getCells(4, 1, 1, 1).setNumericValue(BigDecimal.valueOf(66.78));
 
 		excel.save();
 		excel.close();

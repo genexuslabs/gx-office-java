@@ -1,11 +1,19 @@
 package com.genexus.office.exception;
 
-public class ExcelException extends Throwable
+public class ExcelException extends Exception
 {
 
 	private int _errorCode;
 	private String _errDsc;
 
+	public ExcelException(int errCode, String errDsc, Exception e)
+	{
+		super(e);
+		_errorCode = errCode;
+		_errDsc = errDsc;
+		
+	}
+	
 	public ExcelException(int errCode, String errDsc)
 	{
 		super();
