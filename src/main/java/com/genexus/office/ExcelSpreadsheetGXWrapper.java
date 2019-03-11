@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import com.genexus.diagnostics.core.ILogger;
 import com.genexus.diagnostics.core.LogManager;
 import com.genexus.gxoffice.IGxError;
@@ -13,7 +11,6 @@ import com.genexus.office.exception.ExcelDocumentNotSupported;
 import com.genexus.office.exception.ExcelException;
 import com.genexus.office.exception.ExcelTemplateNotFoundException;
 import com.genexus.office.poi.xssf.ExcelCells;
-import com.genexus.office.poi.xssf.ExcelSpreadsheet;
 import com.genexus.office.poi.xssf.ExcelWorksheet;
 
 public class ExcelSpreadsheetGXWrapper implements IGxError {
@@ -171,7 +168,8 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	}
 
 	public Boolean insertColumn(int colIdx, int colCount) {
-		throw new NotImplementedException();
+		//throw new Exception("NotImplemented");
+		return false;
 		/*
 		 * if (isOK()) { //return _document.(_currentWorksheet, colIdx, colCount); }
 		 * return false;

@@ -5,13 +5,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.junit.*;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import com.genexus.office.poi.xssf.ExcelCells;
 import com.genexus.office.poi.xssf.ExcelWorksheet;
@@ -24,7 +22,7 @@ import com.genexus.office.style.ExcelStyle;
 
 public class AppTest
 {
-	private static String basePath = "C:\\temp\\excel\\";
+	private static String basePath = System.getProperty("user.dir") + File.separatorChar + "excel" + File.separatorChar;
 
 	/**
 	 * Rigourous Test :-)
@@ -34,7 +32,7 @@ public class AppTest
 	public void testFormatoNumero()
 	{
 		String excel1 = basePath + "testFormatoNumero";
-		deletefile(excel1 + ".xlsx");
+		deleteFile(excel1 + ".xlsx");
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel1);
 		
@@ -51,7 +49,7 @@ public class AppTest
 	public void testjapan1()
 	{
 		String excel1 = basePath + "test_japan1";
-		deletefile(excel1 + ".xlsx");
+		deleteFile(excel1 + ".xlsx");
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel1);
 		excel.setColumnWidth(1,  100);
@@ -68,7 +66,7 @@ public class AppTest
 	public void testjapan2()
 	{
 		String excel1 = basePath + "test_japan2";
-		deletefile(excel1 + ".xlsx");
+		deleteFile(excel1 + ".xlsx");
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel1);
 		excel.setColumnWidth(1,  100);
@@ -85,7 +83,7 @@ public class AppTest
 	public void testActiveWorksheet()
 	{
 		String excel1 = basePath + "ActiveWorksheet";
-		deletefile(excel1 + ".xlsx");
+		deleteFile(excel1 + ".xlsx");
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel1);
 		
@@ -105,7 +103,7 @@ public class AppTest
 	public void testWithoutExtensions()
 	{
 		String excel1 = basePath + "test_withoutextension";
-		deletefile(excel1 + ".xlsx");
+		deleteFile(excel1 + ".xlsx");
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel1);
 		excel.insertSheet("genexus0");
@@ -145,7 +143,7 @@ public class AppTest
 	public void testInsertSheet()
 	{
 		String excel1 = basePath + "test_insert_sheet.xlsx";
-		deletefile(excel1);
+		deleteFile(excel1);
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel1);
 		excel.insertSheet("genexus0");
@@ -167,7 +165,7 @@ public class AppTest
 	public void testDeleteSheet()
 	{
 		String excel1 = basePath + "test_delete_sheet.xlsx";
-		deletefile(excel1);
+		deleteFile(excel1);
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel1);
 		excel.insertSheet("gx1");
@@ -218,7 +216,7 @@ public class AppTest
 	{
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		String excel2 = basePath + "excel2.xlsx";
-		deletefile(excel2);
+		deleteFile(excel2);
 		excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel2);
 		excel.setAutofit(true);
@@ -312,7 +310,7 @@ public class AppTest
 	public void testCopySheet() {
 		  ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();		
 		   String excelPath = basePath + "excel_testCopySheet.xlsx";	
-		   deletefile(excelPath);
+		   deleteFile(excelPath);
 	       excel = new ExcelSpreadsheetGXWrapper();   
 	       excel.open(excelPath);
 	       
@@ -339,7 +337,8 @@ public class AppTest
 	@Test
 	public void testgetWorksheets() {
 		  ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();		
-		   String excelPath = basePath + "excel_test_getWorksheets.xlsx";			              
+		   String excelPath = basePath + "excel_test_getWorksheets.xlsx";	
+		   deleteFile(excelPath);
 	       excel = new ExcelSpreadsheetGXWrapper();   
 	       excel.open(excelPath);
 	       
@@ -352,10 +351,10 @@ public class AppTest
 	       excel = new ExcelSpreadsheetGXWrapper();   
 	       excel.open(excelPath);
 	       List<ExcelWorksheet> sheets = excel.getWorksheets();
-	       assertEquals("hoja1", sheets.get(1).getName() );
-	       assertEquals("hoja2", sheets.get(2).getName() );
-	       assertEquals("hoja3", sheets.get(3).getName() );
-	       assertEquals("hoja4", sheets.get(4).getName() );	       	       
+	       assertEquals("hoja1", sheets.get(0).getName() );
+	       assertEquals("hoja2", sheets.get(1).getName() );
+	       assertEquals("hoja3", sheets.get(2).getName() );
+	       assertEquals("hoja4", sheets.get(3).getName() );	       	       
 	       excel.close();	       	       	   
 	}
 	
@@ -364,7 +363,7 @@ public class AppTest
 		  ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();		
 		   String excelPath = basePath + "excel_test_protectedsheet.xlsx";			              
 	       excel = new ExcelSpreadsheetGXWrapper();   
-	       deletefile(excelPath);
+	       deleteFile(excelPath);
 	         
 	       excel.open(excelPath);
 	       excel.setAutofit(true);
@@ -390,7 +389,7 @@ public class AppTest
 	public void testgetWorksheetRename() {
 		  ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();		
 		   String excelPath = basePath + "excel_test_worksheetRename.xlsx";			
-		   deletefile(excelPath);
+		   deleteFile(excelPath);
 	       excel = new ExcelSpreadsheetGXWrapper();   
 	       excel.open(excelPath);
 	       excel.getCurrentWorksheet().rename("defaultsheetrenamed");
@@ -420,7 +419,7 @@ public class AppTest
 	public void testMergeCells() {
 		  ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();		
 		   String excelPath = basePath + "excel_testMergeCells.xlsx";		
-		   deletefile(excelPath);
+		   deleteFile(excelPath);
 	       excel = new ExcelSpreadsheetGXWrapper();   
 	       excel.open(excelPath);
 	       
@@ -435,7 +434,7 @@ public class AppTest
 	public void testColumnAndRowHeight() {
 		  ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();		
 		   String excelPath = basePath + "excel_testColumnAndRowHeight.xlsx";		
-		   deletefile(excelPath);
+		   deleteFile(excelPath);
 	       excel = new ExcelSpreadsheetGXWrapper();   
 	       excel.open(excelPath);
 	       
@@ -452,7 +451,7 @@ public class AppTest
 	public void testAlignment() {
 		  ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();		
 		   String excelPath = basePath + "excel_testAlignment.xlsx";
-		   deletefile(excelPath);
+		   deleteFile(excelPath);
 		   
 	       excel = new ExcelSpreadsheetGXWrapper();   
 	       excel.open(excelPath);
@@ -494,7 +493,7 @@ public class AppTest
 	public void testExcelCellStyle() {
 	   ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();		
 	   String excelPath = basePath + "excelStyleTest.xlsx";  
-	   deletefile(excelPath);      
+	   deleteFile(excelPath);      
        excel = new ExcelSpreadsheetGXWrapper();   
        excel.open(excelPath);
        
@@ -555,7 +554,7 @@ public class AppTest
 	public void testExcelBorderStyle() {
 	   ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();		
 	   String excelPath = basePath + "excelBorderStyle.xlsx";  
-	   deletefile(excelPath);      
+	   deleteFile(excelPath);      
        excel = new ExcelSpreadsheetGXWrapper();   
        excel.open(excelPath);
        IExcelCellRange cells = excel.getCells(1, 1, 2, 2);
@@ -597,7 +596,7 @@ public class AppTest
 	{
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		String excel2 = basePath + "excelInsertRow.xlsx";
-		deletefile(excel2);
+		deleteFile(excel2);
 		excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel2);
 		
@@ -623,7 +622,7 @@ public class AppTest
 	{
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		String excel2 = basePath + "exceldeleterow.xlsx";
-		deletefile(excel2);
+		deleteFile(excel2);
 		excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel2);
 		
@@ -648,7 +647,7 @@ public class AppTest
 	{
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		String excel2 = basePath + "excelhiderow.xlsx";
-		deletefile(excel2);
+		deleteFile(excel2);
 		excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel2);
 		
@@ -675,7 +674,7 @@ public class AppTest
 	{
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		String excel2 = basePath + "excelhidecolumn.xlsx";
-		deletefile(excel2);
+		deleteFile(excel2);
 		excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel2);
 		
@@ -708,7 +707,7 @@ public class AppTest
 	{
 		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
 		String excel2 = basePath + "exceldeletecolumn.xlsx";
-		deletefile(excel2);
+		deleteFile(excel2);
 		excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel2);
 		
@@ -753,12 +752,12 @@ public class AppTest
 	}
 
 	
-	private void deletefile(String path)
+	private void deleteFile(String path)
 	{
 		
 		File file = new File(path);
-		if (file.exists())
+		if (file.exists()) {
 			file.delete();
-		
+		}			
 	}
 }

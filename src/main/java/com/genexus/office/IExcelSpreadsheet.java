@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.genexus.office.exception.ExcelException;
 import com.genexus.office.poi.xssf.ExcelWorksheet;
-import com.genexus.office.style.ExcelStyle;
 
 public interface IExcelSpreadsheet
 {

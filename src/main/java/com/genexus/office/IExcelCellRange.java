@@ -2,8 +2,6 @@ package com.genexus.office;
 
 import java.util.Date;
 
-import com.genexus.office.style.ExcelFill;
-import com.genexus.office.style.ExcelFont;
 import com.genexus.office.style.ExcelStyle;
 
 public interface IExcelCellRange

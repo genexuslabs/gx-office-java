@@ -1,7 +1,5 @@
 package com.genexus.office.exception;
 
-import com.genexus.office.ErrorCodes;
-
 public class ExcelDocumentNotSupported extends ExcelException
 {
 	public ExcelDocumentNotSupported()
