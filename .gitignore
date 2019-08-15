@@ -84,4 +84,6 @@ local.properties
 .worksheet
 /target/
 
+*.xlsx
 
+.idea
