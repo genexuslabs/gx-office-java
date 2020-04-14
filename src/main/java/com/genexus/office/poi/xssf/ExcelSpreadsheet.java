@@ -220,6 +220,16 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 		return newSheet != null;
 	}
 
+	@Override
+	public boolean cloneSheet(String sheetName, String newSheetName) {
+		int idx = _workbook.getSheetIndex(sheetName);
+		if (idx > 0){
+			_workbook.cloneSheet(idx, newSheetName);
+			return true;
+		}
+		return false;
+	}
+
 	private XSSFSheet getSheet(IExcelWorksheet sheet)
 	{
 		return _workbook.getSheet(sheet.getName());
@@ -449,7 +459,7 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 	}
 
 	@Override
-	public Boolean deleteSheet(int sheetIdx) {
+	public boolean deleteSheet(int sheetIdx) {
 		if (_workbook.getNumberOfSheets() > sheetIdx) {
 			_workbook.removeSheetAt(sheetIdx);
 			return true;
@@ -458,7 +468,7 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 	}
 
 	@Override
-	public Boolean deleteSheet(String sheetName) {		
+	public boolean deleteSheet(String sheetName) {
 		if (_workbook.getSheetIndex(sheetName) >= 0) {			
 			_workbook.removeSheetAt(_workbook.getSheetIndex(sheetName));
 			return true;
@@ -467,7 +477,7 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 	}
 
 	@Override
-	public Boolean toggleColumn(IExcelWorksheet worksheet, int colIdx, Boolean visible) {
+	public boolean toggleColumn(IExcelWorksheet worksheet, int colIdx, Boolean visible) {
 		XSSFSheet sheet = _workbook.getSheet(worksheet.getName());
 		if (sheet != null) {
 			sheet.setColumnHidden(colIdx, !visible);
@@ -477,7 +487,7 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 	}
 
 	@Override
-	public Boolean toggleRow(IExcelWorksheet worksheet, int i, Boolean visible) {
+	public boolean toggleRow(IExcelWorksheet worksheet, int i, Boolean visible) {
 		XSSFSheet sheet = _workbook.getSheet(worksheet.getName());
 		if (sheet != null) {			
 			XSSFRow row = sheet.getRow(i);
@@ -491,6 +501,8 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 		}
 		return false;
 	}
+
+
 	
 	
 	

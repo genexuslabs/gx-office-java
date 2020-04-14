@@ -5,12 +5,13 @@ public class ExcelStyle extends ExcelStyleDimension
 	private ExcelFill _cellFill;
 	private ExcelFont _cellFont;
 	private Boolean _locked;
+	private Boolean _hidden;
 	private Boolean _wrapText;
 	private Boolean _shrinkToFit;
 	private ExcelCellBorder _borders;
-	
+	private int _indentation = -1;
 	private int _textRotation;
-	
+	private String dataFormat;
 	/*private ExcelBorder _cellLeftBorder;
 	private ExcelBorder _cellRightBorder;
 	private ExcelBorder _cellTopBorder;
@@ -32,11 +33,19 @@ public class ExcelStyle extends ExcelStyleDimension
 	public Boolean isLocked() {
 		return _locked;
 	}
-	
+
 	public void setLocked(boolean value) {
 		_locked = value;
 	}
-	
+
+	public Boolean isHidden() {
+		return _hidden;
+	}
+
+	public void setHidden(boolean value) {
+		_hidden = value;
+	}
+
 	public ExcelAlignment getCellAlignment() {
 		return _cellAlignment;
 	}
@@ -87,6 +96,13 @@ public class ExcelStyle extends ExcelStyleDimension
 	public void setBorder(ExcelCellBorder _borders) {
 		this._borders = _borders;
 	}
-	
+
+	public int getIndentation() {
+		return _indentation;
+	}
+
+	public void setIndentation(int _indentation) {
+		this._indentation = _indentation;
+	}
 }
 

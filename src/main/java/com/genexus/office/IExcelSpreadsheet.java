@@ -8,47 +8,45 @@ import com.genexus.office.poi.xssf.ExcelWorksheet;
 public interface IExcelSpreadsheet
 {
 	// General Methods
-	public Boolean save() throws ExcelException;
+	Boolean save() throws ExcelException;
 
-	public Boolean saveAs(String newFileName) throws ExcelException;
+	Boolean saveAs(String newFileName) throws ExcelException;
 
-	public Boolean close() throws ExcelException;
+	Boolean close() throws ExcelException;
 
 	// CellMethods
-	public IExcelCellRange getCells(IExcelWorksheet worksheet, int startRow, int startCol, int rowCount, int colCount) throws ExcelException;
+	IExcelCellRange getCells(IExcelWorksheet worksheet, int startRow, int startCol, int rowCount, int colCount) throws ExcelException;
 
-	public IExcelCellRange getCell(IExcelWorksheet worksheet, int startRow, int startCol) throws ExcelException;
+	IExcelCellRange getCell(IExcelWorksheet worksheet, int startRow, int startCol) throws ExcelException;
 
-	public Boolean insertRow(IExcelWorksheet worksheet, int rowIdx, int rowCount);
+	Boolean insertRow(IExcelWorksheet worksheet, int rowIdx, int rowCount);
 
-	public Boolean deleteRow(IExcelWorksheet worksheet, int rowIdx);
+	Boolean deleteRow(IExcelWorksheet worksheet, int rowIdx);
 
 	// Columns not supported
-	// public Boolean insertColumn(IExcelWorksheet worksheet, int rowIdx, int
+	// Boolean insertColumn(IExcelWorksheet worksheet, int rowIdx, int
 	// colIdx);
-	public Boolean deleteColumn(IExcelWorksheet worksheet, int colIdx);
+	Boolean deleteColumn(IExcelWorksheet worksheet, int colIdx);
 
 	// Worksheets
-	public List<ExcelWorksheet> getWorksheets();
-	public ExcelWorksheet getWorkSheet(String name);
+	List<ExcelWorksheet> getWorksheets();
+	ExcelWorksheet getWorkSheet(String name);
 
-	public Boolean insertWorksheet(String newSheetName, int idx);
-	public Boolean getAutofit();
-	public void setAutofit(boolean autofit);
+	Boolean insertWorksheet(String newSheetName, int idx);
+	Boolean getAutofit();
+	void setAutofit(boolean autofit);
 
-	public void setColumnWidth(IExcelWorksheet worksheet, int colIdx, int width);
-	public void setRowHeight(IExcelWorksheet worksheet, int rowIdx, int height);
+	void setColumnWidth(IExcelWorksheet worksheet, int colIdx, int width);
+	void setRowHeight(IExcelWorksheet worksheet, int rowIdx, int height);
 
 	boolean setActiveWorkSheet(String name);
 
-	public Boolean deleteSheet(int sheetIdx);
+	boolean deleteSheet(int sheetIdx);
 
-	public Boolean deleteSheet(String sheetName);
+	boolean deleteSheet(String sheetName);
 
-	public Boolean toggleColumn(IExcelWorksheet worksheet, int colIdx, Boolean visible);
+	boolean toggleColumn(IExcelWorksheet worksheet, int colIdx, Boolean visible);
 
-	public Boolean toggleRow(IExcelWorksheet _currentWorksheet, int i, Boolean visible);
-
-
-	
+	boolean toggleRow(IExcelWorksheet _currentWorksheet, int i, Boolean visible);
+	boolean cloneSheet(String sheetName, String newSheetName);
 }

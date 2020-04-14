@@ -196,6 +196,13 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 		}
 		return false;
 	}
+
+	public Boolean cloneSheet(String sheetName, String newSheetName) {
+		if (initialize()) {
+			return _document.cloneSheet(sheetName, newSheetName);
+		}
+		return false;
+	}
 	
 	public Boolean toggleColumn(int colIdx, Boolean visible) {
 		if (initialize()) {

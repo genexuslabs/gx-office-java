@@ -357,7 +357,34 @@ public class AppTest
 	       assertEquals("hoja4", sheets.get(3).getName() );	       	       
 	       excel.close();	       	       	   
 	}
-	
+
+	@Test
+	public void testHiddenCells() {
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		String excelPath = basePath + "excel_test_hiddencells.xlsx";
+		excel = new ExcelSpreadsheetGXWrapper();
+		deleteFile(excelPath);
+
+		excel.open(excelPath);
+		excel.setAutofit(true);
+		excel.insertSheet("hoja1");
+		excel.setCurrentWorksheetByName("hoja1");
+		excel.getCurrentWorksheet().setProtected("password");
+		excel.getCells(1, 1, 3, 3).setText("texto no se puede editar");
+		ExcelStyle style = new ExcelStyle();
+		style.setHidden(true);
+		excel.getCells(1, 1, 3, 3).setCellStyle(style);
+
+
+		ExcelCells cells = excel.getCells(5, 1, 3, 3);
+		cells.setText("texto SI se puede editar");
+		style = new ExcelStyle();
+		style.setLocked(false);
+		cells.setCellStyle(style);
+		excel.save();
+		excel.close();
+	}
+
 	@Test
 	public void testProtectSheet() {
 		  ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();		
@@ -384,7 +411,29 @@ public class AppTest
 	       excel.save();
 	       excel.close();
 	}
-	
+
+	@Test
+	public void testCloneSheet() {
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		String excelPath = basePath + "excel_test_worksheetClone.xlsx";
+		deleteFile(excelPath);
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excelPath);
+		excel.insertSheet("hoja1");
+		excel.getCell(1,1).setText("1");
+		excel.insertSheet("hoja2");
+		excel.getCell(1,1).setText("2");
+		excel.insertSheet("hoja3");
+		excel.cloneSheet("hoja2", "cloned_hoja2");
+		excel.save();
+		excel.close();
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excelPath);
+		List<ExcelWorksheet> sheets = excel.getWorksheets();
+		assertEquals(4, sheets.size());
+		excel.close();
+	}
+
 	@Test
 	public void testgetWorksheetRename() {
 		  ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();		
@@ -511,6 +560,7 @@ public class AppTest
        //style.getCellFont().getColor().setColorARGB(0, 50, 100, 180);
        style.getCellFill().getCellBackColor().setColorRGB(210,180,140);      
        style.setTextRotation(5);
+
        style.setWrapText(true);
     //   style.setLocked(true);
        
@@ -523,7 +573,8 @@ public class AppTest
        cells = excel.getCells(5, 2, 4, 4);
        
        cells.setText("texto2");
-       style = new ExcelStyle();             
+       style = new ExcelStyle();
+       style.setIndentation(5);
        style.getCellFont().setSize(10);
        style.getCellFont().getColor().setColorRGB(255,255,255);
        //style.getCellFont().getColor().setColorARGB(0, 50, 100, 180);
@@ -569,8 +620,14 @@ public class AppTest
        
        style.getBorder().getBorderTop().setBorder("THICK");
        style.getBorder().getBorderTop().getBorderColor().setColorRGB(220, 20, 60);
-       
-     //  style.getBorder().getBorderLeft().setBorder("DASH_DOT");
+
+		style.getBorder().getBorderDiagonalUp().setBorder("THIN");
+		style.getBorder().getBorderDiagonalUp().getBorderColor().setColorRGB(220, 20, 60);
+
+		style.getBorder().getBorderDiagonalDown().setBorder("THIN");
+		style.getBorder().getBorderDiagonalDown().getBorderColor().setColorRGB(220, 20, 60);
+
+		//  style.getBorder().getBorderLeft().setBorder("DASH_DOT");
       // style.getBorder().getBorderLeft().getBorderColor().setColorRGB(50, 50, 50);
        cells.setCellStyle(style);
        

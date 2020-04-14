@@ -5,9 +5,10 @@ public class ExcelCellBorder {
 	private ExcelBorder borderBottom  = new ExcelBorder();
 	private ExcelBorder borderLeft = new ExcelBorder();
 	private ExcelBorder borderRight = new ExcelBorder();
-	
-	
-	
+	private ExcelBorder borderDiagonalUp = new ExcelBorder();
+	private ExcelBorder borderDiagonalDown = new ExcelBorder();
+
+
 	public void setAll(ExcelBorder borderStyle) {
 		borderTop = borderStyle;
 		borderBottom = borderStyle;
@@ -45,5 +46,18 @@ public class ExcelCellBorder {
 	public void setBorderRight(ExcelBorder borderRight) {
 		this.borderRight = borderRight;
 	}
-	
+
+	public ExcelBorder getBorderDiagonalUp() {
+		return borderDiagonalUp;
+	}
+	public void setBorderDiagonalUp(ExcelBorder borderDiagonal) {
+		this.borderDiagonalUp = borderDiagonal;
+	}
+
+	public ExcelBorder getBorderDiagonalDown() {
+		return borderDiagonalDown;
+	}
+	public void setBorderDiagonalDown(ExcelBorder borderDiagonal) {
+		this.borderDiagonalDown = borderDiagonal;
+	}
 }
