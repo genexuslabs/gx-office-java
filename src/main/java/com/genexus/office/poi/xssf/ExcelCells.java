@@ -1053,6 +1053,10 @@ public class ExcelCells implements IExcelCellRange {
             cellStyle.setIndention((short) newCellStyle.getIndentation());
         }
 
+        if (newCellStyle.getDataFormat() != null && newCellStyle.getDataFormat().length() > 0) {
+            cellStyle.setDataFormat(pWorkbook.createDataFormat().getFormat(newCellStyle.getDataFormat()));
+        }
+
         if (newCellStyle.getBorder() != null) {
             ExcelCellBorder cellBorder = newCellStyle.getBorder();
             applyBorderSide(cellStyle, BorderCellSide.TOP, cellBorder.getBorderTop());

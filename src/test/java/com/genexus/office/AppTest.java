@@ -647,7 +647,27 @@ public class AppTest
        excel.close();
        
 	}
-	
+
+	@Test
+	public void testNumberFormat()
+	{
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		String excel2 = basePath + "excelNumberFormat.xlsx";
+		deleteFile(excel2);
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel2);
+
+		ExcelStyle style = new ExcelStyle();
+		style.setDataFormat("#.##");
+		style.getCellFont().setBold(true);
+		excel.getCell(1, 1).setNumericValue(new java.math.BigDecimal(1.123456789));
+		excel.getCell(1, 1).setCellStyle(style);
+		excel.getCell(2, 1).setNumericValue(new java.math.BigDecimal(20000.123456789));
+
+		excel.save();
+		excel.close();
+	}
+
 	@Test
 	public void testInsertRow()
 	{

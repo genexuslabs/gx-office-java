@@ -11,11 +11,7 @@ public class ExcelStyle extends ExcelStyleDimension
 	private ExcelCellBorder _borders;
 	private int _indentation = -1;
 	private int _textRotation;
-	private String dataFormat;
-	/*private ExcelBorder _cellLeftBorder;
-	private ExcelBorder _cellRightBorder;
-	private ExcelBorder _cellTopBorder;
-	private ExcelBorder _cellBottomBorder;*/
+	private String _dataFormat;
 	private ExcelAlignment _cellAlignment;
 	
 	public ExcelStyle() {		
@@ -23,11 +19,6 @@ public class ExcelStyle extends ExcelStyleDimension
 		_cellFont = new ExcelFont();
 		_cellAlignment = new ExcelAlignment();
 		_borders = new ExcelCellBorder();
-		/*_cellLeftBorder = new ExcelBorder();
-		_cellRightBorder = new ExcelBorder();
-		_cellTopBorder = new ExcelBorder(); 
-		_cellBottomBorder = new ExcelBorder();
-		*/
 	}
 	
 	public Boolean isLocked() {
@@ -103,6 +94,14 @@ public class ExcelStyle extends ExcelStyleDimension
 
 	public void setIndentation(int _indentation) {
 		this._indentation = _indentation;
+	}
+
+	public String getDataFormat() {
+		return _dataFormat;
+	}
+
+	public void setDataFormat(String dataFormat) {
+		this._dataFormat = dataFormat;
 	}
 }
 
