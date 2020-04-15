@@ -189,6 +189,12 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 			if (row != null)
 			{
 				sheet.removeRow(row);
+				int rowIndex = rowIdx;
+				int lastRowNum = sheet.getLastRowNum();
+				if (rowIndex >= 0 && rowIndex < lastRowNum)
+				{
+					sheet.shiftRows(rowIndex + 1, lastRowNum, -1);
+				}
 				return true;
 			}
 		}

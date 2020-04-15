@@ -703,18 +703,22 @@ public class AppTest
 		excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel2);
 		
-		excel.getCell(1, 1).setNumericValue(new java.math.BigDecimal(5));
-		excel.getCell(2, 1).setNumericValue(new java.math.BigDecimal(6));
-		excel.getCell(3, 1).setText("=A1+A2");
+		excel.getCells(1, 1, 1,5).setNumericValue(new java.math.BigDecimal(1));
+		excel.getCells(2, 1, 1,5).setNumericValue(new java.math.BigDecimal(2));
+		excel.getCells(3, 1,1,5).setNumericValue(new java.math.BigDecimal(3));
+		excel.getCells(4, 1,1,5).setNumericValue(new java.math.BigDecimal(4));
 		excel.save();
 		excel.close();
 		// Verify previous Excel Document
 		excel = new ExcelSpreadsheetGXWrapper();
 		excel.open(excel2);
 
-		assertEquals(11, excel.getCell(3, 1).getNumericValue().intValue());
-		excel.deleteRow(3);
-		assertEquals(0, excel.getCell(3, 1).getNumericValue().intValue());
+		assertEquals(1, excel.getCell(1, 1).getNumericValue().intValue());
+		assertEquals(2, excel.getCell(2, 1).getNumericValue().intValue());
+		excel.deleteRow(2);
+		excel.save();
+		excel.open(excel2);
+		assertEquals(3, excel.getCell(2, 1).getNumericValue().intValue());
 		excel.save();
 	}
 	
