@@ -1,58 +1,31 @@
 
 package com.genexus.office.poi.xssf;
 
+import com.genexus.CommonUtil;
+import com.genexus.diagnostics.core.ILogger;
+import com.genexus.diagnostics.core.LogManager;
+import com.genexus.office.IExcelCellRange;
+import com.genexus.office.IGXError;
+import com.genexus.office.exception.ExcelException;
+import com.genexus.office.exception.ExcelReadonlyException;
+import com.genexus.office.style.*;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.model.StylesTable;
+import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTBorder;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTBorderPr;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTXf;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.STBorderStyle;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.model.StylesTable;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFColor;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.*;
-import org.apache.poi.xssf.streaming.*;
-
-import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder;
-
-import org.apache.poi.xssf.model.StylesTable;
-import org.apache.poi.xssf.model.ThemesTable;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTXf;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTBorder;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTBorderPr;
-
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.STBorderStyle;
-
-import com.genexus.GXutil;
-import com.genexus.diagnostics.core.ILogger;
-import com.genexus.diagnostics.core.LogManager;
-import com.genexus.gxoffice.IGxError;
-import com.genexus.office.IExcelCellRange;
-import com.genexus.office.exception.ExcelException;
-import com.genexus.office.exception.ExcelReadonlyException;
-import com.genexus.office.style.ExcelAlignment;
-import com.genexus.office.style.ExcelBorder;
-import com.genexus.office.style.ExcelCellBorder;
-import com.genexus.office.style.ExcelColor;
-import com.genexus.office.style.ExcelFill;
-import com.genexus.office.style.ExcelFont;
-import com.genexus.office.style.ExcelStyle;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTBorder;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTBorderPr;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.STBorderStyle;
 
 public class ExcelCells implements IExcelCellRange {
     public static final ILogger logger = LogManager.getLogger(ExcelCells.class);
-    private IGxError _errorHandler;
+    private IGXError _errorHandler;
     protected boolean fitColumnWidth;
     protected int cellCount;
 
@@ -74,7 +47,7 @@ public class ExcelCells implements IExcelCellRange {
 
     protected ExcelStyle cellStyle;
 
-    public ExcelCells(IGxError errAccess, ExcelSpreadsheet document, XSSFWorkbook workBook, XSSFSheet selectedSheet,
+    public ExcelCells(IGXError errAccess, ExcelSpreadsheet document, XSSFWorkbook workBook, XSSFSheet selectedSheet,
                       int rowPos, int colPos, int height, int width, StylesCache stylesCache) throws ExcelException {
         this(errAccess, document, workBook, selectedSheet, rowPos, colPos, height, width, false, stylesCache);
     }
@@ -82,7 +55,7 @@ public class ExcelCells implements IExcelCellRange {
     public ExcelCells() {
     }
 
-    public ExcelCells(IGxError errAccess, ExcelSpreadsheet document, XSSFWorkbook workBook, XSSFSheet selectedSheet,
+    public ExcelCells(IGXError errAccess, ExcelSpreadsheet document, XSSFWorkbook workBook, XSSFSheet selectedSheet,
                       int rowPos, int colPos, int height, int width, boolean readonly, StylesCache stylesCache)
             throws ExcelException {
         _errorHandler = errAccess;
@@ -173,9 +146,8 @@ public class ExcelCells implements IExcelCellRange {
 
     public boolean setDate(Date value) throws ExcelException {
         CheckReadonlyDocument();
-
         try {
-            if (!GXutil.nullDate().equals(value)) {
+            if (!CommonUtil.nullDate().equals(value)) {
                 String dformat = "";// this.doc.getDateFormat().toLowerCase();
 
                 if (value.getMinutes() == 0 && value.getHours() == 0 && value.getSeconds() == 0
@@ -213,7 +185,7 @@ public class ExcelCells implements IExcelCellRange {
             throw new ExcelException(7, "Invalid cell value");
         }
         if (returnValue == null)
-            returnValue = GXutil.nullDate();
+            returnValue = CommonUtil.nullDate();
         return returnValue;
     }
 

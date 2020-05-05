@@ -15,16 +15,16 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.genexus.util.GXFile;
 import com.genexus.diagnostics.core.ILogger;
 import com.genexus.diagnostics.core.LogManager;
-import com.genexus.gxoffice.Constants;
-import com.genexus.gxoffice.IGxError;
+import com.genexus.office.Constants;
+import com.genexus.office.IGXError;
 import com.genexus.office.IExcelCellRange;
 import com.genexus.office.IExcelSpreadsheet;
 import com.genexus.office.IExcelWorksheet;
 import com.genexus.office.exception.ExcelException;
 import com.genexus.office.exception.ExcelTemplateNotFoundException;
-import com.genexus.util.GXFile;
 
 public class ExcelSpreadsheet implements IExcelSpreadsheet
 {
@@ -35,11 +35,11 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 	
 	
 	private boolean _isReadonly;
-	private IGxError _errorHandler;
+	private IGXError _errorHandler;
 	
 	private StylesCache _stylesCache;
 	
-	public ExcelSpreadsheet(IGxError errHandler, String fileName, String template) throws ExcelTemplateNotFoundException, IOException
+	public ExcelSpreadsheet(IGXError errHandler, String fileName, String template) throws ExcelTemplateNotFoundException, IOException
 	{
 		_errorHandler = errHandler;
 		if (fileName.indexOf('.') == -1)
@@ -122,7 +122,7 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet
 				logger.error("saveAsImpl", e1);
 			}
 
-			throw new ExcelException(12, "GXOffice Error: " + e.toString());
+			throw new ExcelException(12, "GeneXus Office Module Error: " + e.toString());
 		}
 		return true;
 	}

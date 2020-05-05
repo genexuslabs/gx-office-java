@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.genexus.specific.java.Connect;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -23,6 +24,10 @@ import com.genexus.office.style.ExcelStyle;
 public class AppTest
 {
 	private static String basePath = System.getProperty("user.dir") + File.separatorChar + "excel" + File.separatorChar;
+
+	static {
+		Connect.init();
+	}
 
 	/**
 	 * Rigourous Test :-)

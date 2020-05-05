@@ -6,14 +6,13 @@ import java.util.List;
 
 import com.genexus.diagnostics.core.ILogger;
 import com.genexus.diagnostics.core.LogManager;
-import com.genexus.gxoffice.IGxError;
 import com.genexus.office.exception.ExcelDocumentNotSupported;
 import com.genexus.office.exception.ExcelException;
 import com.genexus.office.exception.ExcelTemplateNotFoundException;
 import com.genexus.office.poi.xssf.ExcelCells;
 import com.genexus.office.poi.xssf.ExcelWorksheet;
 
-public class ExcelSpreadsheetGXWrapper implements IGxError {
+public class ExcelSpreadsheetGXWrapper implements IGXError {
 	private static final ILogger logger = LogManager.getLogger(ExcelSpreadsheetGXWrapper.class);
 	private int _errCode;
 	private String _errDescription = "";
@@ -58,7 +57,7 @@ public class ExcelSpreadsheetGXWrapper implements IGxError {
 	public boolean open(String filePath, String template) {
 		try {
 			logger.debug("Opening Excel file: " + filePath);
-			_document = ExcelFactory.create((IGxError) this, filePath, template);
+			_document = ExcelFactory.create((IGXError) this, filePath, template);
 			if (_autofit) {
 				_document.setAutofit(_autofit);
 			}

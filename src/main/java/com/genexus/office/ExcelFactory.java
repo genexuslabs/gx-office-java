@@ -1,15 +1,14 @@
 package com.genexus.office;
 
-import java.io.IOException;
-
-import com.genexus.gxoffice.IGxError;
 import com.genexus.office.exception.ExcelDocumentNotSupported;
 import com.genexus.office.exception.ExcelTemplateNotFoundException;
+
+import java.io.IOException;
 
 public class ExcelFactory
 {
 
-	public static IExcelSpreadsheet create(IGxError handler, String filePath, String template)
+	public static IExcelSpreadsheet create(IGXError handler, String filePath, String template)
 			throws ExcelTemplateNotFoundException, IOException, ExcelDocumentNotSupported
 	{
 		if (filePath.endsWith(".xlsx") || !filePath.contains("."))
