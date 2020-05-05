@@ -63,8 +63,8 @@ public class AppTest
 		newCellStyle.getCellFont().setBold(true);
 		excel.getCells(2, 1, 1, 5).setCellStyle(newCellStyle);
 	
-		excel.save();
-
+		boolean ok = excel.save();
+		assertTrue(ok);
 	}
 	
 	@Test
@@ -440,6 +440,25 @@ public class AppTest
 	}
 
 	@Test
+	public void testCloneSheet2() {
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		String excelPath = basePath + "excel_test_worksheetClone2.xlsx";
+		deleteFile(excelPath);
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excelPath);
+		excel.getCell(2,2).setText("hello");
+		boolean ok = excel.cloneSheet(excel.getCurrentWorksheet().getName(), "clonedSheet");
+		assertTrue(ok);
+		excel.save();
+		excel.close();
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excelPath);
+		List<ExcelWorksheet> sheets = excel.getWorksheets();
+		assertEquals(2, sheets.size());
+		excel.close();
+	}
+
+	@Test
 	public void testgetWorksheetRename() {
 		  ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();		
 		   String excelPath = basePath + "excel_test_worksheetRename.xlsx";			
@@ -724,6 +743,31 @@ public class AppTest
 		excel.save();
 		excel.open(excel2);
 		assertEquals(3, excel.getCell(2, 1).getNumericValue().intValue());
+		excel.save();
+	}
+
+	@Test
+	public void testDeleteRow2()
+	{
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		String excel2 = basePath + "exceldeleterow2.xlsx";
+		deleteFile(excel2);
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel2);
+
+		excel.getCell(2,2).setText("hola");
+		excel.save();
+		excel.close();
+		// Verify previous Excel Document
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel2);
+		assertEquals("hola", excel.getCell(2, 2).getText());
+		boolean result = excel.deleteRow(1);
+		assertTrue(result);
+		excel.save();
+		excel.close();
+		excel.open(excel2);
+		assertEquals("hola", excel.getCell(1, 2).getText());
 		excel.save();
 	}
 	

@@ -73,19 +73,20 @@ public class ExcelSpreadsheetGXWrapper implements IGXError {
 	}
 
 	public Boolean save() {
+		boolean ok = true;
 		if (initialize()) {
 			try {
 				_document.save();
 			} catch (ExcelException e) {
 				this.setError("Excel File could not be saved", e);
+				ok = false;
 			}
 		}
-		return false;
+		return ok;
 	}
 
 	public Boolean saveAs(String newFileName, String password) {
 		return saveAsImpl(newFileName, password);
-
 	}
 
 	public Boolean saveAs(String newFileName) {
@@ -93,15 +94,17 @@ public class ExcelSpreadsheetGXWrapper implements IGXError {
 	}
 
 	private Boolean saveAsImpl(String newFileName, String password) {
+		boolean ok = true;
 		if (initialize()) {
 			try {
 				_document.saveAs(newFileName);
 
 			} catch (ExcelException e) {
 				this.setError(e);
+				ok = false;
 			}
 		}
-		return false;
+		return ok;
 	}
 
 	public ExcelCells getCell(int rowIdx, int colIdx) {
@@ -248,7 +251,6 @@ public class ExcelSpreadsheetGXWrapper implements IGXError {
 		}
 		_currentWorksheet = null;
 		_document = null;
-
 		return true;
 	}
 
@@ -270,7 +272,6 @@ public class ExcelSpreadsheetGXWrapper implements IGXError {
 			return (ExcelWorksheet) _currentWorksheet;
 		}
 		return null;
-
 	}
 
 	public List<ExcelWorksheet> getWorksheets() {
