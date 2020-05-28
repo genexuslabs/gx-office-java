@@ -5,7 +5,7 @@
 
 	<groupId>com.genexus.office</groupId>
 	<artifactId>genexus-office</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>genexus-office</name>
@@ -25,23 +25,20 @@
 			<version>4.8.1</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>3.17</version>
-			<scope>compile</scope>
+			<version>4.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
-			<version>3.17</version>
-			<scope>compile</scope>
+			<version>4.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml-schemas</artifactId>
-			<version>3.17</version>
+			<version>4.1.2</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -136,19 +133,6 @@
 					<executable>C:\Program Files\Java\jdk1.8.0_241</executable>
 					<compilerVersion>1.8</compilerVersion>
 				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>3.1.11</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

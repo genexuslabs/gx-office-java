@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import com.genexus.specific.java.Connect;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ public class AppTest
 	private static String basePath = System.getProperty("user.dir") + File.separatorChar + "excel" + File.separatorChar;
 
 	static {
-		Connect.init();
+		com.genexus.specific.java.Connect.init();
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class AppTest
 		
 		excel.getCells(4, 1, 1, 1).setNumericValue(BigDecimal.valueOf(0.123));
 		excel.save();
-
+		System.out.println(excel1);
 	}
 	
 	@Test
@@ -239,20 +239,7 @@ public class AppTest
 		excel.save();
 	}
 	
-	
-	@Test
-	public void testReadExcelFile() {
-		testSetCellValues();
-		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
-		 //Test opening Existing Excel Sheet
-        String excel3 = basePath + "readExcelFileTest1.xlsx";  
-        excel = new ExcelSpreadsheetGXWrapper();
-        excel.open(excel3);   
-              
-        assertEquals(excel.getCell(2, 2).getNumericValue().intValue(), 100, 0 );
-        assertEquals(excel.getCell(3, 3).getNumericValue().intValue(), 100, 0);
-        excel.close();
-	}
+
 	
 	@Test
 	public void testExcelCellRange() {
@@ -455,6 +442,29 @@ public class AppTest
 		excel.open(excelPath);
 		List<ExcelWorksheet> sheets = excel.getWorksheets();
 		assertEquals(2, sheets.size());
+		excel.close();
+	}
+
+	@Test
+	public void testCloneSheetError() {
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		String excelPath = basePath + "excel_test_worksheetClone_error.xlsx";
+		deleteFile(excelPath);
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excelPath);
+		excel.insertSheet("hoja1");
+		excel.getCell(1,1).setText("1");
+		excel.insertSheet("hoja2");
+		excel.getCell(1,1).setText("2");
+		excel.insertSheet("hoja3");
+		excel.cloneSheet("hoja2", "cloned_hoja2");
+		excel.cloneSheet("hoja2", "hoja2");
+		excel.save();
+		excel.close();
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excelPath);
+		List<ExcelWorksheet> sheets = excel.getWorksheets();
+		assertEquals(4, sheets.size());
 		excel.close();
 	}
 

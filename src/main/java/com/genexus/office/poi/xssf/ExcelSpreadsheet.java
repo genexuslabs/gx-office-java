@@ -194,13 +194,16 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet {
     }
 
     @Override
-    public boolean cloneSheet(String sheetName, String newSheetName) {
+    public boolean cloneSheet(String sheetName, String newSheetName) throws ExcelException{
         int idx = _workbook.getSheetIndex(sheetName);
-        if (idx >= 0) {
-            _workbook.cloneSheet(idx, newSheetName);
-            return true;
+        if (_workbook.getSheet(newSheetName) != null) {
+            throw new ExcelException(13, "The workbook already contains a sheet named:" + newSheetName);
         }
-        return false;
+        if (idx < 0) {
+            throw new ExcelException(14, "The workbook does not contain a sheet named:" + sheetName);
+        }
+        _workbook.cloneSheet(idx, newSheetName);
+        return true;
     }
 
     private XSSFSheet getSheet(IExcelWorksheet sheet) {
@@ -394,23 +397,23 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet {
         cNew.setCellStyle(cOld.getCellStyle());
 
         switch (cOld.getCellType()) {
-            case Cell.CELL_TYPE_BOOLEAN: {
+            case BOOLEAN: {
                 cNew.setCellValue(cOld.getBooleanCellValue());
                 break;
             }
-            case Cell.CELL_TYPE_NUMERIC: {
+            case NUMERIC: {
                 cNew.setCellValue(cOld.getNumericCellValue());
                 break;
             }
-            case Cell.CELL_TYPE_STRING: {
+            case STRING: {
                 cNew.setCellValue(cOld.getStringCellValue());
                 break;
             }
-            case Cell.CELL_TYPE_ERROR: {
+            case ERROR: {
                 cNew.setCellValue(cOld.getErrorCellValue());
                 break;
             }
-            case Cell.CELL_TYPE_FORMULA: {
+            case FORMULA: {
                 cNew.setCellFormula(cOld.getCellFormula());
                 break;
             }

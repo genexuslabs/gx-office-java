@@ -2,8 +2,6 @@
 package com.genexus.office.poi.xssf;
 
 import com.genexus.CommonUtil;
-import com.genexus.diagnostics.core.ILogger;
-import com.genexus.diagnostics.core.LogManager;
 import com.genexus.office.IExcelCellRange;
 import com.genexus.office.IGXError;
 import com.genexus.office.exception.ExcelException;
@@ -24,7 +22,6 @@ import java.util.Date;
 
 
 public class ExcelCells implements IExcelCellRange {
-    public static final ILogger logger = LogManager.getLogger(ExcelCells.class);
     private IGXError _errorHandler;
     protected boolean fitColumnWidth;
     protected int cellCount;
@@ -199,7 +196,7 @@ public class ExcelCells implements IExcelCellRange {
                     try {
                         pCells[i].setCellFormula(value.substring(1));
                     } catch (Exception e) {
-                        pCells[i].setCellType(XSSFCell.CELL_TYPE_STRING);
+                        pCells[i].setCellType(CellType.STRING);
                         pCells[i].setCellValue(value);
                     }
                 } else
@@ -207,7 +204,7 @@ public class ExcelCells implements IExcelCellRange {
             }
             return true;
         } catch (Exception e) {
-            throw new ExcelException(7, "Invalid cell value");
+            throw new ExcelException(7, "Invalid cell value", e);
         }
     }
 
@@ -219,9 +216,9 @@ public class ExcelCells implements IExcelCellRange {
 
     public String getText() {
         try {
-            if (pCells[1].getCellType() == XSSFCell.CELL_TYPE_FORMULA)
+            if (pCells[1].getCellType() == CellType.FORMULA)
                 return "=" + pCells[1].getCellFormula();
-            else if (pCells[1].getCellType() == XSSFCell.CELL_TYPE_NUMERIC) {
+            else if (pCells[1].getCellType() == CellType.NUMERIC) {
                 if (org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(pCells[1])) {
                     return pCells[1].getDateCellValue().toString();
                 } else {
@@ -264,26 +261,26 @@ public class ExcelCells implements IExcelCellRange {
     public String getType() {
         String type = null;
         switch (pCells[1].getCellType()) {
-            case XSSFCell.CELL_TYPE_BLANK:
+            case BLANK:
                 type = "U";
                 break;
-            case XSSFCell.CELL_TYPE_BOOLEAN:
+            case BOOLEAN:
                 type = "N";
                 break;
-            case XSSFCell.CELL_TYPE_ERROR:
+            case ERROR:
                 type = "U";
                 break;
-            case XSSFCell.CELL_TYPE_FORMULA:
+            case FORMULA:
                 type = getFormulaType();
                 break;
-            case XSSFCell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 if (org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(pCells[1])) {
                     type = "D";
                 } else {
                     type = "N";
                 }
                 break;
-            case XSSFCell.CELL_TYPE_STRING:
+            case STRING:
                 type = "C";
                 break;
             default:
@@ -1035,8 +1032,6 @@ public class ExcelCells implements IExcelCellRange {
             applyBorderSide(cellStyle, BorderCellSide.BOTTOM, cellBorder.getBorderBottom());
             applyBorderSide(cellStyle, BorderCellSide.LEFT, cellBorder.getBorderLeft());
             applyBorderSide(cellStyle, BorderCellSide.RIGHT, cellBorder.getBorderRight());
-            applyBorderSide(cellStyle, BorderCellSide.DIAGONALDOWN, cellBorder.getBorderDiagonalDown());
-            applyBorderSide(cellStyle, BorderCellSide.DIAGONALUP, cellBorder.getBorderDiagonalUp());
 
             Boolean hasDiagonalUp = cellBorder.getBorderDiagonalUp() != null && cellBorder.getBorderDiagonalUp().isDirty();
             Boolean hasDiagonalDown = cellBorder.getBorderDiagonalDown() != null && cellBorder.getBorderDiagonalDown().isDirty();

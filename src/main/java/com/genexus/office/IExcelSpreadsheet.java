@@ -48,5 +48,5 @@ public interface IExcelSpreadsheet
 	boolean toggleColumn(IExcelWorksheet worksheet, int colIdx, Boolean visible);
 
 	boolean toggleRow(IExcelWorksheet _currentWorksheet, int i, Boolean visible);
-	boolean cloneSheet(String sheetName, String newSheetName);
+	boolean cloneSheet(String sheetName, String newSheetName) throws ExcelException;
 }
