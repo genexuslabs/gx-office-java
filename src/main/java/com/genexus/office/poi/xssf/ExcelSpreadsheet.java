@@ -154,7 +154,7 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet {
          * true, false); XSSFRow newRow = sheet.createRow(createNewColumnAt); } return
          * true; } return false;
          */
-        return false; // POI not suppoerted
+        return false; // POI not supported
     }
 
     public Boolean deleteRow(IExcelWorksheet worksheet, int rowIdx) {
