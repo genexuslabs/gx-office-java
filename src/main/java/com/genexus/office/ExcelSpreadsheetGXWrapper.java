@@ -195,10 +195,7 @@ public class ExcelSpreadsheetGXWrapper implements IGXError {
     }
 
     public Boolean insertSheet(String sheetName) {
-        if (initialize(sheetName)) {
-            return _document.insertWorksheet(sheetName, 0);
-        }
-        return false;
+        return _document != null && _document.insertWorksheet(sheetName, 0) && initialize(sheetName);
     }
 
     public Boolean cloneSheet(String sheetName, String newSheetName) {

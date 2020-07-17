@@ -1,8 +1,5 @@
 package com.genexus.office;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,6 +13,8 @@ import com.genexus.office.poi.xssf.ExcelCells;
 import com.genexus.office.poi.xssf.ExcelWorksheet;
 import com.genexus.office.style.ExcelAlignment;
 import com.genexus.office.style.ExcelStyle;
+
+import static org.junit.Assert.*;
 
 /**
  * Unit test for simple App.
@@ -83,7 +82,24 @@ public class AppTest
 		excel.save();
 
 	}
-	
+
+	@Test
+	public void testInsertSheets()
+	{
+		String excel1 = basePath + "testInsertSheets";
+		deleteFile(excel1 + ".xlsx");
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excel1);
+
+		boolean ok = excel.insertSheet("test1");
+		assertTrue(ok);
+		ok = excel.insertSheet("test2");
+		assertTrue(ok);
+		ok = excel.insertSheet("test1");
+		assertFalse(ok);
+		excel.save();
+	}
+
 	@Test
 	public void testActiveWorksheet()
 	{
