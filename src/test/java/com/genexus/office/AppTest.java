@@ -297,6 +297,46 @@ public class AppTest
 	      // excel.close();
 	}
 
+	@Test
+	public void testSetCurrentWorksheetByIdx() {
+		ExcelSpreadsheetGXWrapper excel = new ExcelSpreadsheetGXWrapper();
+		String excelPath = basePath + "excel_test_setCurrentWorksheet.xlsx";
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excelPath);
+
+		excel.insertSheet("hoja1");
+		excel.insertSheet("hoja2");
+		excel.insertSheet("hoja3");
+		excel.save();
+		excel.close();
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excelPath);
+		excel.setCurrentWorksheet(2);
+		assertEquals("hoja2", excel.getCurrentWorksheet().getName() );
+		excel.getCell(5, 5).setText("hola");
+		excel.save();
+		excel.close();
+
+
+		excel = new ExcelSpreadsheetGXWrapper();
+		excel.open(excelPath);
+		boolean ok = excel.setCurrentWorksheet(2);
+		assertEquals("hola", excel.getCell(5, 5).getText());
+		assertEquals(true, ok);
+
+		ok = excel.setCurrentWorksheet(1);
+		assertEquals(true, ok);
+		ok = excel.setCurrentWorksheet(3);
+		assertEquals(true, ok);
+		ok = excel.setCurrentWorksheet(4);
+		assertEquals(false, ok);
+		ok = excel.setCurrentWorksheet(5);
+		assertEquals(false, ok);
+		ok = excel.setCurrentWorksheet(0);
+		assertEquals(false, ok);
+		excel.close();
+	}
+
 	
 	@Test
 	public void testCopySheet() {

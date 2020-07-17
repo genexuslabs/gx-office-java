@@ -141,8 +141,9 @@ public class ExcelSpreadsheetGXWrapper implements IGXError {
     }
 
     public Boolean setCurrentWorksheet(int sheetIdx) {
-        if (initialize() && _document.getWorksheets().size() >= sheetIdx) {
-            _currentWorksheet = _document.getWorksheets().get(sheetIdx);
+        int zeroIndexSheet = sheetIdx - 1;
+        if (zeroIndexSheet >= 0 && initialize() && _document.getWorksheets().size() > zeroIndexSheet) {
+            _currentWorksheet = _document.getWorksheets().get(zeroIndexSheet);
             if (_currentWorksheet != null) {
                 _document.setActiveWorkSheet(_currentWorksheet.getName());
             }
