@@ -1,6 +1,10 @@
 
 package com.genexus.office.poi.xssf;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import com.genexus.CommonUtil;
 import com.genexus.office.IExcelCellRange;
 import com.genexus.office.IGXError;
@@ -145,27 +149,25 @@ public class ExcelCells implements IExcelCellRange {
         CheckReadonlyDocument();
         try {
             if (!CommonUtil.nullDate().equals(value)) {
-                String dformat = "";// this.doc.getDateFormat().toLowerCase();
+				String dformat = this.doc.getDateFormat().toLowerCase();
+				Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+				calendar.setTime(value);
+				if (calendar.get(Calendar.MINUTE) == 0 && calendar.get(Calendar.HOUR) == 0
+						&& calendar.get(Calendar.SECOND) == 0 && dformat.indexOf(' ') > 0) {
+					dformat = dformat.substring(0, dformat.indexOf(' '));
+				}
 
-                if (value.getMinutes() == 0 && value.getHours() == 0 && value.getSeconds() == 0
-                        && dformat.indexOf(' ') > 0) {
-                    dformat = dformat.substring(0, dformat.indexOf(' '));
-                }
+				DataFormat df = pWorkbook.createDataFormat();
+				CellStyle newStyle = stylesCache.getCellStyle(df.getFormat(dformat));
 
-                XSSFCellStyle newStyle = pWorkbook.createCellStyle();
-
-                for (int i = 1; i <= cellCount; i++) {
-                    XSSFCellStyle cellStyle = pCells[i].getCellStyle();
-                    copyPropertiesStyle(newStyle, cellStyle);
-                    if (dformat.isEmpty()) {
-                        newStyle.setDataFormat((short) 14);
-                    } else {
-                        newStyle.setDataFormat(pWorkbook.createDataFormat().getFormat(dformat));
-                    }
-                    pCells[i].setCellValue(value);
-                    pCells[i].setCellStyle(newStyle);
-                    fitColumnWidth(i, dformat.length() + 4);
-                }
+				for (int i = 1; i <= cntCells; i++) {
+					CellStyle cellStyle = pCells[i].getCellStyle();
+					copyPropertiesStyle(newStyle, cellStyle);
+					newStyle.setDataFormat(df.getFormat(dformat));
+					pCells[i].setCellValue(value);
+					pCells[i].setCellStyle(newStyle);
+					fitColumnWidth(i, dformat.length() + 4);
+				}
                 return true;
             }
         } catch (Exception e) {
