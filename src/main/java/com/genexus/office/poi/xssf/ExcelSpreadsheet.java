@@ -82,6 +82,7 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet {
         ByteArrayOutputStream fs = null;
         ByteArrayInputStream in = null;
         GXFile file = null;
+        boolean savedOK = false;
 
         autoFitColumns();
         recalculateFormulas();
@@ -92,7 +93,7 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet {
             in = new ByteArrayInputStream(fs.toByteArray());
             fs.close();
             file = new GXFile(fileName, Constants.EXTERNAL_PRIVATE_UPLOAD);
-            file.create(in, true);
+            savedOK = file.create(in, true);
             in.close();
             file.close();
         } catch (Exception e) {
@@ -109,7 +110,7 @@ public class ExcelSpreadsheet implements IExcelSpreadsheet {
 
             throw new ExcelException(12, "GeneXus Office Module Error: " + e.toString());
         }
-        return true;
+        return savedOK;
     }
 
     public Boolean saveAs(String newFileName) throws ExcelException {

@@ -74,15 +74,18 @@ public class ExcelSpreadsheetGXWrapper implements IGXError {
     }
 
     public Boolean save() {
-        boolean ok = true;
+        boolean ok = false;
         if (initialize()) {
             try {
-                _document.save();
+                ok = _document.save();
+                if (!ok){
+                    this.setError(ErrorCodes.FILE_NOT_SAVED, "Excel File could not be saved");
+                }
             } catch (ExcelException e) {
                 this.setError("Excel File could not be saved", e);
-                ok = false;
             }
         }
+
         return ok;
     }
 

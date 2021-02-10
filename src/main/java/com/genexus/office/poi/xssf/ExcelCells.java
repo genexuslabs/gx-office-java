@@ -892,7 +892,13 @@ public class ExcelCells implements IExcelCellRange {
 
     @Override
     public Boolean mergeCells() {
-        CellRangeAddress cellRange = new CellRangeAddress(colStartIdx, colEndIdx, rowStartIdx, rowEndIdx);
+        CellRangeAddress cellRange = new CellRangeAddress(rowStartIdx, rowEndIdx, colStartIdx, colEndIdx);
+        for (int i = 0; i < pSelectedSheet.getNumMergedRegions(); i++){
+            CellRangeAddress mergedRegion = pSelectedSheet.getMergedRegion(i);
+            if (cellRange.intersects(cellRange)){
+                pSelectedSheet.removeMergedRegion(i);
+            }
+        }
         pSelectedSheet.addMergedRegion(cellRange);
         return true;
     }
@@ -1014,8 +1020,9 @@ public class ExcelCells implements IExcelCellRange {
             cellStyle.setWrapText(newCellStyle.getWrapText());
         }
 
-        if (newCellStyle.getTextRotation() > 0) {
-            cellStyle.setRotation((short) newCellStyle.getTextRotation());
+        if (newCellStyle.getTextRotation() != 0) {
+
+            cellStyle.setRotation((short) (newCellStyle.getTextRotation()));
         }
 
         if (newCellStyle.getIndentation() >= 0) {
@@ -1080,8 +1087,6 @@ public class ExcelCells implements IExcelCellRange {
                 }
                 catch (IllegalArgumentException e) {}
 			}
-			StylesTable _stylesSource = this.pWorkbook.getStylesSource();
-
             if (border.getBorder() != null && border.getBorder().length() > 0) {
                 BorderStyle bs = BorderStyle.valueOf(border.getBorder());
                 if (bSide == BorderCellSide.BOTTOM) {

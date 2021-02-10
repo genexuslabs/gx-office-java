@@ -1,5 +1,6 @@
 package com.genexus.office.poi.xssf;
 
+import org.apache.poi.ss.usermodel.SheetVisibility;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -25,8 +26,23 @@ public class ExcelWorksheet implements IExcelWorksheet
 		return _sheet.getSheetName();
 	}
 
+	public Boolean setHidden(boolean hidden)
+	{
+		if (_sheet != null) {
+			XSSFWorkbook wb = _sheet.getWorkbook();
+			wb.setSheetVisibility(sheetIndex(wb), (hidden)? SheetVisibility.HIDDEN: SheetVisibility.VISIBLE);
+			return true;
+		}
+		return false;
+	}
+
 	public Boolean isHidden()
 	{
+		if (_sheet != null) {
+			XSSFWorkbook wb = _sheet.getWorkbook();
+			SheetVisibility sheetVisibility = wb.getSheetVisibility(sheetIndex(wb));
+			return sheetVisibility.compareTo(SheetVisibility.HIDDEN) == 0;
+		}
 		return false;
 	}
 
@@ -59,6 +75,10 @@ public class ExcelWorksheet implements IExcelWorksheet
 			else
 				_sheet.protectSheet(password);		
 		}		
+	}
+
+	private int sheetIndex(XSSFWorkbook wb) {
+		return wb.getSheetIndex(getName());
 	}
 
 }
